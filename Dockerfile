@@ -2,7 +2,7 @@ FROM python:3.7-alpine3.8
 
 EXPOSE 8443
 
-RUN apk add --no-cache make libressl libressl-dev gcc musl-dev postgresql-libs postgresql-dev
+RUN apk add --no-cache make libressl libressl-dev gcc musl-dev
 
 RUN mkdir /beacon
 COPY requirements.txt /beacon/requirements.txt
