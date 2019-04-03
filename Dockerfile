@@ -13,7 +13,7 @@ RUN apk del --no-cache --purge make gcc postgresql-dev musl-dev libressl-dev && 
 
 COPY manage.py /beacon/manage.py
 COPY logger.yaml /beacon/logger.yaml
-COPY egafiles /beacon/beaconui
+COPY beaconui /beacon/beaconui
 COPY static /beacon/static
 COPY templates /beacon/templates
 
