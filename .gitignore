@@ -1,0 +1,15 @@
+*~
+.#*
+.DS_Store
+__pycache__/
+*.py[cod]
+*$py.class
+
+*.errors
+data
+
+.python-version
+
+*.log
+*.so
+

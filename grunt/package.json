@@ -1,0 +1,14 @@
+{
+  "name": "EGAFiles",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "^1.0.3",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-watch": "~1.0.0"
+  },
+  "dependencies": {
+    "grunt-cli": "^1.2.0",
+    "normalize.css": "^8.0.0",
+    "npm": "^6.3.0"
+  }
+}

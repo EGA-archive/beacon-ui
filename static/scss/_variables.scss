@@ -1,0 +1,29 @@
+$font-size-lg:    12px !default; //1.25rem
+
+$footer-bg:       #FAFAFA !default;
+$panel-nav-color: #303438 !default;
+$gradient-header-left:       #39B1A4;
+$gradient-header-right:       #0D81B0;
+
+$table-header-bg: #ef6e53 !default;
+$table-header-fg: white;
+$table-border-color: #dedede;
+$table-label-hover: #f1b29b;
+
+
+$alert-success-text:             #3c763d !default;
+$alert-success-bg:               #dff0d8 !default;
+$alert-success-border:           darken($alert-success-bg, 5%) !default;
+
+$alert-info-text:                #31708f !default;
+$alert-info-bg:                  #d9edf7 !default;
+$alert-info-border:              darken($alert-info-bg, 7%) !default;
+
+$alert-warning-text:             #8a6d3b !default;
+$alert-warning-bg:               #fcf8e3 !default;
+$mark-bg:                        $alert-warning-bg !default;
+$alert-warning-border:           darken($alert-warning-bg, 5%) !default;
+
+$alert-danger-text:              #a94442 !default;
+$alert-danger-bg:                #f2dede !default;
+$alert-danger-border:            darken($alert-danger-bg, 5%) !default;

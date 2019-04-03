@@ -1,0 +1,3 @@
+django
+PyYAML
+aiohttp_wsgi

@@ -1,0 +1,173 @@
+#data {
+
+    width:800px; margin: 1em auto;
+
+    display:flex;
+    flex-flow:row wrap;
+    justify-content:space-between;
+
+    section {
+	box-sizing:border-box; width:32%; padding:1ex;
+	margin-bottom:1em;
+	box-shadow: 0 0 5px 0px #ccc;
+	border: 1px solid #ccc;
+	border-radius:5px;
+	
+	
+	h2 { margin-bottom:1em; text-align: center; font-size:1rem; font-weight:normal; }
+
+	svg { max-width: 100%; }
+    }
+
+    .wide { width:100%; /* height:250px; */ }
+
+
+    rect[height="0"], rect[width="0"] { display: none; }
+
+    text.no-data {
+        font-size:10px;
+	text-anchor: middle;
+	color:black;
+	background:none;
+    }
+
+    text.percent { text-anchor: middle; }
+    text.pie-data { text-anchor: middle; font-size: 80%; color:#ccc; }
+
+    path.plot { stroke: #e68d59; stroke-width: 3; fill: none; }
+
+    circle.point {
+	cursor: none;
+	stroke:none; fill:transparent;
+	&:hover { fill: black;  }
+    }
+
+
+    path.arc {
+        fill: blue; /* default */
+	&.arc-0 { fill:#216696; }
+	&.arc-1 { fill:#d6e9f3; }
+    }
+
+
+    g.axis {
+        /* font: 10px sans-serif; */
+
+	 path.domain, .tick line {
+             fill: none;
+             stroke: #000;
+             shape-rendering: crispEdges;
+	 }
+
+    }
+
+    text.x-axis-name, text.y-axis-name {
+	font-variant:small-caps; text-transform: capitalize; font-size:0.7em;
+    }
+
+    rect.bar {
+    	stroke:white;
+	stroke-width:1px;
+    	fill:steelblue;
+    }
+
+
+    .cheat {
+        stroke: black;
+        stroke-width: 3;
+        fill: red;
+    }
+
+    g.stack {
+        fill: blue; /* default */
+	/* rect { cursor: help; } */
+	&.stack-mapped { fill:#15486f; }
+	&.stack-unmapped { fill:#e68d59; }
+    }
+
+    g.legend {
+	&.legend-mapped { fill:#15486f; }
+	&.legend-unmapped { fill:#e68d59; }
+	text { color:black; font-variant:small-caps; text-transform: capitalize; font-size:0.7em; }
+    }
+
+    /* Reset */
+    #base-coverage, #base-quality, #mapping-quality, #mapped-unmapped {
+	h2 { margin-bottom:0; }
+    }
+
+
+
+
+
+
+    /* info flip effect */
+    section {
+
+	background-color: transparent;
+	position:relative;
+	perspective: 1000px; /* 3D effect */
+
+	> div, svg {
+	    backface-visibility: hidden;
+	    /* -webkit-backface-visibility: hidden; */
+	    transition: transform 0.8s;
+	    transform-style: preserve-3d;
+	    background-color:white;
+	}
+
+	svg {
+	    position:relative;
+	    transform: rotateY(0deg);
+	    z-index: 2;
+	}
+	&.open svg { transform: rotateY(180deg); }
+
+	> div {
+	    position:absolute;
+	    top:4em; left:1ex; bottom:2ex; right:1ex; /* 2ex-hack for bottom cuz I can't get the height right.*/
+	    transform: rotateY(180deg);
+	    z-index: 1;
+	    overflow: auto;
+	    padding:0 1em;
+	    p { margin:0 0 1em 0; padding:0; }
+	}
+	&.open > div { transform: rotateY(0deg); }
+
+
+	.trigger {
+	    cursor: pointer;
+	    &:after {
+		content: 'i';
+		position:absolute; top:1ex; right:1ex;
+		z-index:100;
+		display:block; text-align:center;
+		width:1em; padding:0 0.2ex;
+		border-radius:50%;
+		background:#7a7a7a;
+		color:white;
+		font-size:80%;
+	    }
+	}
+	&.open .trigger:after { content:'x'; }
+    
+    }
+
+
+
+
+
+
+    /* VCF */
+    rect.basechanges {
+	fill:black;
+	stroke:black;
+	stroke-width:1;
+	&.basechanges-A { fill:rgb(162,182,117); }
+	&.basechanges-C { fill:rgb(81,145,193); }
+	&.basechanges-G { fill:rgb(235,201,118); }
+	&.basechanges-T { fill:rgb(187,108,111); }
+    }
+    text.basechanges-label { font-size:90%; }
+    line.basechanges-label-line { stroke:black; stroke-width:1; }
+}
