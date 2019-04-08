@@ -7,6 +7,8 @@ __pycache__/
 
 *.errors
 data
+tmp
+beacon.db
 
 .python-version
 

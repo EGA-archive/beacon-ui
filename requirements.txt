@@ -1,4 +1,8 @@
 django
 PyYAML
+aiohttp
 aiohttp_wsgi
-requests
+aiohttp_session
+cryptography
+aiohttp_jinja2
+jinja2

@@ -21,8 +21,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['tf.crg.eu','ega-archive.org','130.239.81.195','localhost']
 
 ADMINS = (
-    ('Fred', 'frederic.haziza@crg.eu'),
     ('Sabela', 'sabela.delatorre@crg.eu'),
+    ('Fred', 'frederic.haziza@crg.eu'),
 )
 SERVER_EMAIL = 'all.ega@crg.eu'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -33,6 +33,7 @@ LOGIN_URL = '/login/'
 
 INSTALLED_APPS = [
     'beaconui',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
 ]
 
@@ -42,8 +43,9 @@ CACHES = {
     },
 }
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,6 +58,15 @@ CACHE_MIDDLEWARE_SECONDS = 3600 # seconds
 CACHE_MIDDLEWARE_KEY_PREFIX = '' # don't care
 
 ROOT_URLCONF = 'beaconui.urls'
+
+DATABASES = {
+    'default': {
+        # SQLite
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'beacon.db'),
+        'OPTIONS': { 'timeout': 300, }
+    }
+}
 
 TEMPLATES = [
     {

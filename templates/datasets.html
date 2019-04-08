@@ -1,14 +1,19 @@
 <label for="id_datasets">Select a dataset</label>
 <select name="datasets" id="id_datasets" required>
   {% for d in datasets %}
-  {% if d.info.accessType == 'PUBLIC' %}
+  {% for info in d.info %}
+  {% if info.key == 'accessType' %}
+  {% if info.value == 'PUBLIC' or user %}
      {% if d.variantCount %}
      <option data-assemblyid="{{ d.assemblyId }}" value="{{ d.id }}">{{ d.id }} ({{ d.variantCount }} variants)</option>
      {% else %}
      <option data-assemblyid="{{ d.assemblyId }}" value="{{ d.id }}">{{ d.id }}</option>
      {% endif %}
   {% endif %}
+  {% endif %}
   {% endfor %}
+  {% endfor %}
+
   {% if all_ds %}
   <option data-assemblyid="" value="all">all ({{ all_ds }} variants)</option>
   {% endif %}

@@ -33,3 +33,7 @@ log:
 exec:
 	docker exec -it crg-$(CONTAINER) sh
 
+
+db:
+	rm -rf beacon.db
+	python manage.py migrate

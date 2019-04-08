@@ -41,7 +41,10 @@ body{
       
       h1 { color:#1b5276; }
       
-      nav { margin-left: auto; }
+      nav {
+	  margin-left: auto;
+	  a, span { margin-right:1em }
+      }
   }
   
 }
@@ -50,5 +53,6 @@ body{
 footer {
     display:none;
 }
+
 
 

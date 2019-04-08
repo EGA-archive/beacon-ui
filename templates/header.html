@@ -7,28 +7,12 @@
       <h1>EGA Beacon</h1>
 
       <nav>
-      {% comment %}
-      <a href="{% url 'login' %}">Login</a>
-      <section>
-        <p>By use of this Beacon Service, I agree to forego any
-           attempt to re-identify individuals represented in Beacon
-           Service Replies, except where expressly authorized by law
-           or by a written prior permission from the respective
-           DAC. (<a href="{% url 'login' %}">more details</a>)
-        </p>
-	<form action="" method="post" id="login-form">
-	  <fieldset>
-            <label for="username">Username</label>
-            <input name="username" type="text" placeholder="Username" />
-	  </fieldset>
-	  <fieldset>
-            <label for="password">Password</label>
-            <input name="password" type="password" placeholder="Password" autocomplete="off" />
-	  </fieldset>
-	  <button type="submit" name="login">Log in</button>
-	</form>
-      </section>
-      {% endcomment %}
-      <a href="{% url 'index' %}">Info</a>
+	<a href="{% url 'index' %}">Info</a>
+	{% if user %}
+	<span>{{ user.nickname }}</span>
+	<a href="{% url 'logout' %}">Logout</a>
+	{% else %} 
+	<a href="{% url 'login' %}">Login</a>
+	{% endif %}
       </nav>
     </header>

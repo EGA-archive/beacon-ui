@@ -9,7 +9,8 @@ module.exports = function(grunt) {
 		    style: 'compact'
 		},
 		files: {
-		    '../static/css/style.css': '../static/scss/style.scss'
+		    '../static/css/style.css': '../static/scss/style.scss',
+		    '../static/css/error.css': '../static/scss/errors.scss'
 		}
 	    }
 	}
