@@ -97,4 +97,4 @@ STATICFILES_DIRS = [ # additional
 
 # Beacon Public Endpoint
 BEACON_ENDPOINT="https://ega-archive.org/beacon-api/"
-
+BEACON_INFO_ENDPOINT="https://ega.crg.eu/requesterportal/v1/beacon/?limit=0"

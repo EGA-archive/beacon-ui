@@ -16,21 +16,9 @@
     {% include 'query.html' %}
 
     <main>
-      <p>The EGA archives a large number of datasets, some of which
-	 are <span class="label label-public">Publicly</span>
-	 available.  If you have an account on this website, you can
-	 access to <span class="label
-	 label-registered">Registered</span> datasets.  To
-	 access <span class="label label-controlled">Controlled</span>
-	 datasets can be done by contacting the relevant Data Access
-	 Committee (DAC), whose details are displayed on the Dataset
-	 description page under "Who controls access to this dataset".
-      </p>
-      {% for dataset in datasets %}
+      {% for r in results %}
       <section>
-	<a href="//ega-archive.org/datasets/{{ dataset.id }}">{{ dataset.id }}</a>
-	<p>{{ dataset.description }}</p>
-	<span class="label label-{{ dataset.info.accessType|lower }}">{{ dataset.info.accessType|upper }}</span>
+	{{ r }}
       </section>
       {% endfor %}
     </main>

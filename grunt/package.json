@@ -1,14 +1,21 @@
 {
   "name": "EGAFiles",
   "version": "0.1.0",
+  "description": "EGA file portal - preprocessors",
   "devDependencies": {
-    "grunt": "^1.0.3",
+    "autoprefixer": "^9.5.0",
+    "cssnano": "^4.1.10",
+    "grunt": "^1.0.4",
     "grunt-contrib-sass": "^1.0.0",
-    "grunt-contrib-watch": "~1.0.0"
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-cssnano": "^2.1.0",
+    "grunt-pixrem": "^0.1.2",
+    "grunt-postcss": "^0.9.0",
+    "pixrem": "^5.0.0"
   },
   "dependencies": {
     "grunt-cli": "^1.2.0",
     "normalize.css": "^8.0.0",
-    "npm": "^6.3.0"
+    "npm": "^6.9.0"
   }
 }

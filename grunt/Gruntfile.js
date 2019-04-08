@@ -2,8 +2,8 @@ module.exports = function(grunt) {
 
     // Configuration
     grunt.initConfig({
-	pkg: grunt.file.readJSON('package.json'),
-	sass: {
+	pkg: grunt.file.readJSON('package.json')
+	, sass: {
 	    dist: {
 		options: {
 		    style: 'compact'
@@ -12,14 +12,34 @@ module.exports = function(grunt) {
 		    '../static/css/style.css': '../static/scss/style.scss'
 		}
 	    }
-	},
-	watch: {
+	}
+	, postcss: {
+	    options: {
+		//diff: true,
+		//map: true, // inline sourcemaps
+		// or
+		map: {
+		    //inline: false, // save all sourcemaps as separate files...
+		    annotation: '../static/css/maps/' // ...to the specified directory
+		}
+		
+		, processors: [
+		    require('pixrem')(), // add fallbacks for rem units
+		    require('autoprefixer')({browsers: 'last 2 versions'}), // add vendor prefixes
+		    require('cssnano')() // minify the result
+		]
+	    }
+	    , dist: {
+		src: '../static/css/*.css'
+	    }
+	}
+	, watch: {
 	    options: {
         	livereload: true,
     	    },
 	    css: {
 		files: ['../static/scss/**/*.scss'],
-		tasks: ['sass'],
+		tasks: ['sass','postcss'],
 		options: {}
 	    }
 	}
@@ -28,8 +48,9 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-postcss');
 
     // Start
-    grunt.registerTask('default', ['sass', 'watch']);
+    grunt.registerTask('default', ['sass', 'postcss', 'watch']);
 
 };

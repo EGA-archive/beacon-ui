@@ -1,0 +1,29 @@
+    <form action="query" method="post" id="query">
+      <span class="trigger"></span>
+      {% csrf_token %}
+      
+      {% for hidden_field in form.hidden_fields %}
+         {{ hidden_field }}
+      {% endfor %}
+
+      {% include 'datasets.html' %}
+
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert">
+	{% for error in form.non_field_errors %}
+           {{ error }}
+	{% endfor %}
+      </div>
+      {% endif %}
+
+      {% for field in form.visible_fields %}
+      <fieldset>
+	{{ field.label_tag }} {{ field }}
+      </fieldset>       
+      {% endfor %}
+
+      <p class="alert alert-info">
+	This Beacon is based on the GA4GH Beacon <a href="//github.com/ga4gh/beacon-team/...">API 1.0.1</a>.
+      </p>
+      <button>Find</button>
+    </form>
