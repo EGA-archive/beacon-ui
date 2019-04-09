@@ -35,5 +35,5 @@ exec:
 
 
 db:
-	rm -rf beacon.db
+	rm -rf db.sqlite
 	python manage.py migrate

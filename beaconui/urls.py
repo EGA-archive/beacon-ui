@@ -1,10 +1,11 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import EGABeaconInfoView, EGABeaconResultsView, EGABeaconLoginView, EGABeaconLogoutView
+from .views import EGABeaconInfoView, EGABeaconResultsView
+from .aai import EGABeaconLoginView, EGABeaconLogoutView
 
 urlpatterns = [
-    path('', EGABeaconInfoView.as_view(), name='index'),
+    path('', EGABeaconInfoView.as_view(), name='info'),
     path('query', EGABeaconResultsView.as_view(), name='query'),
     path('login', EGABeaconLoginView.as_view(), name='login'),
     path('privacy', TemplateView.as_view(template_name='privacy.html'), name='privacy'),

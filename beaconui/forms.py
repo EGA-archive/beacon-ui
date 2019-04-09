@@ -43,5 +43,6 @@ class QueryForm(forms.Form):
     variantType = forms.CharField(required=False, label='Variant Type',
                                      widget=forms.TextInput(attrs={'data-lpignore':'true'}))
 
-    includeDatasetResponses = forms.BooleanField(label='Include Datasets in response',
-                                                 required=False)
+    includeDatasetResponses = forms.ChoiceField(required=False,
+                                                choices=( (i,i) for i in ('All','Hit','Miss','None') ),
+                                                label='Include Datasets')

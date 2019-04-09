@@ -5,9 +5,13 @@
   {% if info.key == 'accessType' %}
   {% if info.value == 'PUBLIC' or user %}
      {% if d.variantCount %}
-     <option data-assemblyid="{{ d.assemblyId }}" value="{{ d.id }}">{{ d.id }} ({{ d.variantCount }} variants)</option>
+     <option data-assemblyid="{{ d.assemblyId }}" value="{{ d.id }}">
+       {{ d.id }} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }})
+     </option>
      {% else %}
-     <option data-assemblyid="{{ d.assemblyId }}" value="{{ d.id }}">{{ d.id }}</option>
+     <option data-assemblyid="{{ d.assemblyId }}" value="{{ d.id }}">
+       {{ d.id }}
+     </option>
      {% endif %}
   {% endif %}
   {% endif %}
@@ -15,6 +19,6 @@
   {% endfor %}
 
   {% if all_ds %}
-  <option data-assemblyid="" value="all">all ({{ all_ds }} variants)</option>
+  <option data-assemblyid="" value="all">all ({{ all_ds }} variant{{ all_ds|pluralize }})</option>
   {% endif %}
 </select>
