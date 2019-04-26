@@ -1,0 +1,72 @@
+{% load static %}
+{% load beacon %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width, shrink-to-fit=no"/>
+    <title>EGA Beacon | Access Levels</title>
+
+    <link rel="stylesheet" href="//necolas.github.io/normalize.css/latest/normalize.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link rel="icon" href="//ega-archive.org/favicon.ico">
+  </head>
+  <body>
+
+    {% include 'header.html' %}
+
+    <main id="access-levels">
+      <div id="access-levels-legend">
+	<span class="label label-public">Public</span>
+	<span class="label label-registered">Registered</span>
+	<span class="label label-controlled">Controlled</span>
+	<span class="label label-not_supported">Not Supported</span>
+
+
+	include
+	<a href="{% url 'levels' %}?includeFieldDetails=true&includeDatasetDifferences={{ includeDatasetDifferences|yesno:'true,false' }}">Field Details</a>
+	/
+	<a href="{% url 'levels' %}?includeFieldDetails={{ includeFieldDetails|yesno:'true,false' }}&includeDatasetDifferences=true">Dataset Differences</a>
+	/
+	<a href="{% url 'levels' %}?includeFieldDetails=true&includeDatasetDifferences=true">Both</a>
+	/
+	<a href="{% url 'levels' %}?includeFieldDetails=false&includeDatasetDifferences=false">Nothing</a>
+
+	{% comment %}
+	<span>include</span>
+	<input type="checkbox" name="field-details" id="include-field-details" {% if includeFieldDetails %}checked{% endif %} />
+	<label for="include-field-details">field details</label>
+	<input type="checkbox" name="dataset-differences" id="include-dataset-differences" {% if includeDatasetDifferences %}checked{% endif %} />
+	<label for="include-dataset-differences">dataset differences</label>
+	{% endcomment %}
+
+      </div>
+      <h1>Fields</h1>
+      {% if request.GET.includeFieldDetails != 'true' %}
+      <ul class="collapsed">
+	{% for f,v in fields.items %}
+	<li><span class="label label-{{ v|lower }}">{{ f }}</span></li>
+	{% endfor %}
+      </ul>
+      {% else %}
+      <ul class="expanded">
+	{% for f,d in fields.items %}
+	<li>{{ f }}: <ul>{% for k,v in d.items %}<li><span class="label label-{{ v|lower }}">{{ k }}</span></li>{% endfor %}</ul></li>
+	{% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if datasets %}
+      <h1>Datasets<small>(differing from the above fields)</small></h1>
+      <ul>
+	{% for d,v in datasets.items %}
+	<li>{{ d }}: <span class="label label-{{ v|lower }}">{{ v|upper }}</span></li>
+	{% endfor %}
+      </ul>
+      {% endif %}
+    </main>
+
+    {% include 'footer.html' %}
+  </body>
+</html>

@@ -13,13 +13,13 @@ import yaml
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "beaconui.settings")
-
-application = get_wsgi_application()
-
 # Logging
 LOG_YML = os.getenv('LOG_YML', os.path.join(os.path.dirname(os.path.dirname(__file__)),'logger.yaml'))
 if os.path.exists(LOG_YML):
     with open(LOG_YML, 'rt') as stream:
         #print('Using logger',LOG_YML)
-        logging.config.dictConfig(yaml.load(stream))
+        logging.config.dictConfig(yaml.safe_load(stream))
+
+# The App
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "beaconui.settings")
+application = get_wsgi_application()

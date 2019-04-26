@@ -1,9 +1,11 @@
 
 main {
-    grid-area: main;
+    /* grid-area: main; */
+    width:1140px; margin:0 auto;
+
     padding:0 1em;
     justify-content: stretch;
-    min-width:800px; max-width:100%;
+    min-width:750px; max-width:100%;
 
     span.label {
 	display: inline;
@@ -19,10 +21,13 @@ main {
 	&.label-registered { background-color: #f0ad4e; }
 	&.label-public     { background-color: #5cb85c; }
 	&.label-controlled { background-color: #d9534f; }
+	&.label-not_supported { background-color: #ccc; }
     }
     
     p { margin:0 0 1em 0; }
+}
 
+main#info {
     section {
 	display:flex;
 	flex-flow: row no-wrap;
@@ -39,5 +44,20 @@ main {
 	> a { display:inline-block; margin:0; padding:0; }
 
     }
+}
 
+main#results {
+
+    display:flex;
+
+    table {
+	flex-basis:30%;
+	padding:1em;
+	border:1px solid red;
+    }
+
+    table.latest-result {
+	flex-basis:100%;
+	border-color:#ccc;
+    }
 }

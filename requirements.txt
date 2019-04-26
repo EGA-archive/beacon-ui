@@ -6,3 +6,4 @@ aiohttp_session
 cryptography
 aiohttp_jinja2
 jinja2
+urlib3==1.24.2

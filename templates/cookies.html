@@ -1,4 +1,4 @@
-{%if not request.COOKIES.beacon %}
+{% if not request.COOKIES.beacon %}
 {% load static %}
 <div id="beacon-cookies">
   <div>
@@ -14,4 +14,4 @@
   </div>
   <button>Accept</button>
 </div>
-{%endif %}
+{% endif %}

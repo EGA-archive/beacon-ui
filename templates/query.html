@@ -1,30 +1,118 @@
-    <form action="query" method="post" id="query">
-      <span class="trigger"></span>
+<form id="query"
+      action="{% url 'beacon' %}"
+      method="post"
+      accept-charset="UTF-8"
+      autocomplete="off"
+      enctype="multipart/form-data"
+      novalidate="">
+
       {% csrf_token %}
       
-      {% for hidden_field in form.hidden_fields %}
-         {{ hidden_field }}
-      {% endfor %}
-
-      {% include 'query.error.html' %}
-
-      {% if form.non_field_errors %}
-      <div class="alert alert-danger" role="alert">
-	{% for error in form.non_field_errors %}
-           {{ error }}
-	{% endfor %}
-      </div>
+      {% if results.error %}
+      <section id="query-errors">
+	<div class="error-{{ error.errorCode }}">
+	  {{ results.error.message }}
+	</div>
+      </section>
       {% endif %}
 
-      {% include 'datasets.html' %}
-      {% for field in form.visible_fields %}
-      <fieldset>
-	{{ field.label_tag }} {{ field }}
-      </fieldset>       
-      {% endfor %}
+      <pre>{{ formdata }}</pre>
+      <pre>{{ formdata.extended }}</pre>
 
-      <p class="alert alert-info">
-	This Beacon is based on the GA4GH Beacon <a href="//github.com/ga4gh/beacon-team/...">API 1.0.1</a>.
-      </p>
-      <button>Find</button>
-    </form>
+      {{ form.extended.label_tag }} {{ form.extended }}
+      <section id="simplified-query">
+	{{ simplifiedform.assemblyID }}
+	{{ simplifiedform.query }}
+	<button type="submit">Search</button>
+      </section>
+
+      <section id="extended-query">
+	<fieldset>
+	  {{ form.assemblyId.label_tag }} {{ form.assemblyId }}
+	</fieldset>     
+
+	<fieldset>
+	  {{ form.referenceName.label_tag }} {{ form.referenceName }}
+	</fieldset>       
+
+	<fieldset>
+	  {{ form.start.label_tag }} {{ form.start }}
+	  {{ form.startMin.label_tag }} {{ form.startMin }}
+	  {{ form.startMax.label_tag }} {{ form.startMax }}
+	</fieldset>       
+
+	<fieldset>
+	  {{ form.end.label_tag }} {{ form.end }}
+	  {{ form.endMin.label_tag }} {{ form.endMin }}
+	  {{ form.endMax.label_tag }} {{ form.endMax }}
+	</fieldset>       
+
+	<fieldset>
+	  {{ form.referenceBases.label_tag }} {{ form.referenceBases }}
+	</fieldset>       
+
+	<fieldset>
+	  {{ form.alternateBases.label_tag }} {{ form.alternateBases }}
+	</fieldset>       
+
+	<fieldset>
+	  {{ form.variantType.label_tag }} {{ form.variantType }}
+	</fieldset>       
+
+	<button type="submit">Search</button>
+      </section>
+
+
+      <fieldset id="query-datasets">
+	<legend>Dataset(s)</legend>
+	<span>All</span>/<span>None</span>
+
+	{% for d in beacon.datasets %}
+	{% for info in d.info %}
+	   {% comment %}
+	   {% if info.authorized == 'true' %}
+	   <label>
+	     <input type="checkbox" name="datasets" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
+	     {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
+	   </label>
+	   {% endif %}
+	   {% endcomment %}
+
+	   {% if info.key == "authorized" %}
+	   {% if info.value == "true" %}
+	   <label>
+	     <input type="checkbox" name="datasets" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
+	     {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
+	   </label>
+	   {% else %}
+	   <label class="dataset-not-authorized">
+	     <input type="checkbox" disabled name="datasets" value="{{ d.id }}" />
+	     {{ d.id }}
+	   </label>
+	   {% endif %}
+	   {% endif %}
+
+	{% endfor %}
+	{% endfor %}
+      </fieldset>
+
+      <fieldset id="include-dataset-responses">
+	{{ form.includeDatasetResponses.label_tag }} {{ form.includeDatasetResponses }} 
+      </fieldset>
+
+      <fieldset id="query-filters">
+	<legend>Filters <i class="filter-add fas fa-plus-circle"></i></legend>
+	{% for f in filters %}
+	<section>
+	  <input type="text" value="{{ f }}" {% if not f %}placeholder="HP:0011007>=49 or PATO:0000383 or EFO:0009656" {% endif %}name="filters" data-lpignore="true" />
+	  <i class="filter-remove fas fa-minus-circle"></i>
+	</section>
+	{% empty %}
+	<section>
+	  <input type="text" value="" placeholder="HP:0011007>=49 or PATO:0000383 or EFO:0009656" name="filters" data-lpignore="true" />
+	  <i class="filter-remove fas fa-minus-circle"></i>
+	</section>
+	{% endfor %}
+      </fieldset>
+
+</form>

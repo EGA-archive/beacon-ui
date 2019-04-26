@@ -14,17 +14,26 @@
 
 
     // Click/Toggle sidebar panel
-    $( "form#query > span" ).click(function() {
-	$( this ).parents('body').toggleClass( "open" );
+    $( ".trigger" ).click(function() {
+	$( this ).parent('div').toggleClass( "open" );
     });
-    
-    
-    var assemblyField = $( "#id_assemblyID" );
-    $( "#id_datasets" ).on('change', function() {
-	var a = $( this ).find("option:selected").attr('data-assemblyid');
-	assemblyField.val(a);
-    }).trigger('change');
 
 
-    
+
+    var filters = $( "#query-filters" );
+    filters.delegate( ".filter-add", "click", function() {
+
+	var tpl = '<section>' + 
+	          '  <input type="text" value="" placeholder="HP:0011007>=49 or PATO:0000383 or EFO:0009656" name="filters" data-lpignore="true" />' + 
+	          '  <i class="filter-remove fas fa-minus-circle"></i>' +
+	          '</section>';
+
+	var me = $(tpl);
+	filters.append(me);
+    });
+
+    filters.delegate( ".filter-remove", "click", function() {
+	$( this ).parent('section').remove();
+    });
+
 })();

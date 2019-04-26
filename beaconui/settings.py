@@ -1,5 +1,5 @@
 """
-Django settings for EGA Beacon Frontend.
+Django settings for Beacon Frontend.
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
@@ -17,6 +17,7 @@ SECRET_KEY = '45@$0dth)d(pi*s6ejaay8xd@s0scjqgl_nj0ezyuon*2xxz@p'
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = False
 DEBUG = True
+TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['tf.crg.eu','ega-archive.org','130.239.81.195','localhost']
 
@@ -106,6 +107,24 @@ STATICFILES_DIRS = [ # additional
     os.path.join(BASE_DIR, 'static'), # so we don't need collectstatic
 ]
 
-# Beacon Public Endpoint
-BEACON_ENDPOINT="https://ega-archive.org/beacon-api/"
-BEACON_INFO_ENDPOINT="https://ega.crg.eu/requesterportal/v1/beacon/?limit=0"
+#########################################################################
+# Beacon Endpoints
+#########################################################################
+
+#BEACON_ENDPOINT = 'https://egatest.crg.eu/requesterportal/v1/beacon/'
+#BEACON_ENDPOINT = 'https://ega.crg.eu/requesterportal/v1/beacon/'
+BEACON_ENDPOINT = 'http://localhost:10000/elixirbeacon/v1/beacon/'
+
+
+#########################################################################
+# Fetch info, datasets and assemblyIds
+#########################################################################
+from .info import fetch
+
+BEACON_INFO = fetch(None, access_token=None)
+if not BEACON_INFO:
+    raise Exception('Backend not available at {}'.format(BEACON_ENDPOINT))
+
+# This beacon datasets is for the non logged-in users
+BEACON_DATASETS = BEACON_INFO.get('datasets',[])
+BEACON_ASSEMBLYIDS = set( (d['assemblyId'] for d in BEACON_DATASETS) )

@@ -12,7 +12,7 @@ loggers:
   beaconui:
     level: DEBUG
     handlers: [console]
-    propagate: False
+    propagate: True
   urllib3:
     level: CRITICAL
     handlers: [console]

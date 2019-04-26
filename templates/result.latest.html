@@ -1,0 +1,33 @@
+<table class="latest-results">
+  <thead>
+    <tr>
+      <th>Chr</th>
+      <th>Start</th>
+      <th>Ref</th>
+      <th>Alt</th>
+      <th>Ass</th>
+      <th>Exists</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ds in result.datasetAlleleResponses %}
+    <tr>
+      <td>{{ ds.referenceName }}</td>
+      <td>{{ ds.start }}</td>
+      <td>{{ ds.referenceBase }}</td>
+      <td>{{ ds.alternateBase }}</td>
+      <td>{{ ds.assembyId }}</td>
+      <td>{{ ds.exists }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td>{{ result.referenceName }}</td>
+      <td>{{ result.start }}</td>
+      <td>{{ result.referenceBase }}</td>
+      <td>{{ result.alternateBase }}</td>
+      <td>{{ result.assembyId }}</td>
+      <td>{{ result.exists }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

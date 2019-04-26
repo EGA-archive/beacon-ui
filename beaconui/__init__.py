@@ -1,8 +1,8 @@
 from django.apps import AppConfig
 
-class EGABeaconConfig(AppConfig):
+class BeaconConfig(AppConfig):
     name = 'beaconui'
-    verbose_name = "EGA Beacon Frontend"
+    verbose_name = "Beacon Frontend"
 
 
-default_app_config = 'beaconui.EGABeaconConfig'
+default_app_config = 'beaconui.BeaconConfig'

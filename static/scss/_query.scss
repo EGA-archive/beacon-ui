@@ -1,13 +1,10 @@
 form#query {
 
-    grid-area: sidebar;
-    justify-self: end;
-    
     background-color: #f5f5f5;
     color:#333;
 
     box-sizing:border-box;
-    width:400px;
+    width:100%;
     padding:1em;
 
     position:relative;
@@ -15,33 +12,58 @@ form#query {
     border-radius: 1em 1em 0 0;
     font-size:90%;
 
-    fieldset {
-	display: flex;
-	flex-flow: row no-wrap;
-	border:0;
-	padding:0.5em 0;
+    /* fieldset { */
+    /* 	display: flex; */
+    /* 	flex-flow: row wrap; */
+    /* 	border:0; */
+    /* 	padding:0.5em 0; */
 	
-	label {
-	    text-align: right;
-	    margin-right:1em; padding:6px 0;
-	    min-width: 130px; 
-	}
-	/* label::after { content:":"; } */
-	input[type="text"], input[type="number"], select {
-	    outline:none;
-	    flex:1;
-	    padding: 6px 12px;
-	    color: #555;
-	    background-color: #fff;
-	    border: 1px solid #ccc;
-	    border-radius: 4px;
-	    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-	    transition: ease-in-out .15s;
-	}
+    /* 	label { */
+    /* 	    text-align: right; */
+    /* 	    margin-right:1em; padding:6px 0; */
+    /* 	    min-width: 130px;  */
+    /* 	} */
+    /* 	/\* label::after { content:":"; } *\/ */
+    /* 	input[type="text"], input[type="number"], select { */
+    /* 	    outline:none; */
+    /* 	    flex:1; */
+    /* 	    padding: 6px 12px; */
+    /* 	    color: #555; */
+    /* 	    background-color: #fff; */
+    /* 	    border: 1px solid #ccc; */
+    /* 	    border-radius: 4px; */
+    /* 	    box-shadow: inset 0 1px 1px rgba(0,0,0,.075); */
+    /* 	    transition: ease-in-out .15s; */
+    /* 	} */
 
+    /* } */
+
+
+    #id_extended {
+	/* text-indent:-10000px; */
+	/* visibility:hidden; */
+    }
+    #id_extended:before { content: "Extended parameters"; display:inline-block; }
+    #id_extended ~ #simplifed-query { display:block; }
+    #id_extended ~ #extended-query { display:none; }
+
+    #id_extended:checked:before { content: "Simplified parameters"; display:inline-block; }
+    #id_extended:checked ~ #simplified-query { display:none; }
+    #id_extended:checked ~ #extended-query { display:block; }
+
+    #query-filters {
+	i { cursor:pointer; }
+	i.filter-add { display:inline-block; }
     }
 
-    #id_assemblyID { background-color: transparent; border-color:transparent; box-shadow: none; }
+    #query-datasets {
+	label {
+	    display: block; 
+	    &.dataset-not-authorized { opacity: 0.5; text-decoration: line-through; }
+	}
+    }
+
+
 
     p { text-align: right; }
     button { float: right; }

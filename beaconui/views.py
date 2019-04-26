@@ -4,146 +4,135 @@ import json
 import uuid
 import base64
 from urllib.parse import urlencode
-from hashlib import sha256
+from itertools import chain
 
 import requests
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.conf import settings
-from django.urls import reverse
 from django.contrib.auth import logout
-from django.core.cache import caches, cache
 
-
-from .forms import QueryForm
+from .info import with_info
+from .forms import BeaconQueryDict, SimplifiedQueryForm, QueryForm
 
 LOG = logging.getLogger(__name__)
 
 ####################################
 
+class BeaconView(TemplateView):
 
-IDP_URL = 'https://egatest.crg.eu/idp/'
-CLIENT_ID='beaconUI'
-CLIENT_SECRET='NWjr_uGUafUt7KVyn-kZDvSIN9EzRC0bW9OzBur7KYuhpMzuImDRDwdfsTqj6ldjGb3ZlZ2n4RXJJNim-KepWA'
-SCOPE='profile email openid'
-AUTHORIZE_URL = IDP_URL + 'authorize?'
-ACCESS_TOKEN_URL = IDP_URL + 'token'
-USER_INFO_URL = IDP_URL + 'userinfo'
+    # If the user is not logged-in, the beacon_info are already cached
+    @with_info
+    def get(self, request, user, access_token, beacon_info):
 
-# Beacon Endpoints
-BEACON_INTERNAL_ENDPOINT='https://egatest.crg.eu/requesterportal/v1/beacon/'
-
-####################################
-
-def make_cache_key(*args):
-    LOG.debug('Making Cache Key for: %s', args)
-    m = sha256()
-    for a in args:
-        if a:
-            m.update(str(a).encode())
-    return m.hexdigest().lower()
-
-# Probably stupid here, but will be enhanced later.
-def user_has_access(user, accessType):
-    return accessType == 'PUBLIC' or user
-
-def get_info(user, access_token):
-    
-    cache_key = make_cache_key(user,access_token)
-    cached_data = cache.get(cache_key)
-    if cached_data:
-        LOG.info('Rendering using cache: %s', cache_key)
-        return cached_data
-    else:
-        LOG.info('Contacting Beacon backend: %s', BEACON_INTERNAL_ENDPOINT)
-        query_url = BEACON_INTERNAL_ENDPOINT + '?limit=0'
-        headers = { 'Accept': 'application/json',
-                    'Content-type': 'application/json',
-                    #'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        }
-        params = {}
-        if access_token: # we have a user
-            params['auth'] = 'yes'
-            headers['Authorization'] = 'Bearer '+access_token
-
-        r = requests.get(query_url, headers=headers, params=params)
-        if r.status_code > 200:
-            return None
-
-        data = r.json()
-        datasets = data.get('datasets')
-        all_ds = 0
-        if datasets:
-            all_ds = sum(d['variantCount'] for d in datasets \
-                         if any(i['key'] == 'accessType' and user_has_access(user, i['value']) \
-                                for i in d['info']))
-
-        LOG.info('Caching results with key: %s', cache_key)
-        res = (data, all_ds)
-        cache.set(cache_key, res )
-        return res
-
-
-####################################
-
-class EGABeaconInfoView(TemplateView):
-
-    def get(self, request):
-        LOG.debug('INFO start %s', '-'*30)
         user = request.session.get('user')
-        access_token = request.session.get('access_token')
 
-        info = get_info(user, access_token)
-
-        if not info:
-            return render(request, 'error.html', {'message':'Backend not available' })
-
-        data, all_ds = info
-        datasets = data.get('datasets')
-
-        #LOG.debug(data)
-        form = QueryForm(label_suffix="")
-
-        ctx = { 'user': user, 'form':form, 'datasets':datasets, 'all_ds': all_ds, 'error': data.error }
-        LOG.debug('INFO  end %s', '-'*30)
+        ctx = { 'user': user,
+                'formdata': BeaconQueryDict(None),
+                'form': QueryForm(),
+                'simplifiedform': SimplifiedQueryForm(prefix = 'simplifiedform'),
+                'beacon': beacon_info,
+                'assemblyIds': settings.BEACON_ASSEMBLYIDS, # same for everyone
+                'chromosomes': chain(range(1,22), ('X','Y','MT')),
+        }
         return render(request, 'info.html', ctx)
 
-
-class EGABeaconResultsView(TemplateView):
-
-    def post(self, request):
-        LOG.debug('RESULTS start %s', '-'*30)
-
-        form = QueryForm(request.POST, label_suffix="")
-
-        # if not form.is_valid():
-        #     return render(request, 'info.html', {"form": form}) # with errors
-        
-        LOG.debug('POST data: %s', request.POST)
-
-
-        # Otherwise, forward to backend
-        query_url = BEACON_INTERNAL_ENDPOINT + 'query'
-        LOG.debug('Forwarding to %s',query_url)
-
-        r = requests.get(query_url, data=request.POST)
-        if not r:
-            return render(request, 'error.html', {'message':'Backend not available' })
+    @with_info
+    def post(self, request, user, access_token, beacon_info):
 
         user = request.session.get('user')
-        access_token = request.session.get('access_token')
-        info = get_info(user, access_token)
-        data, all_ds = info
-        datasets = data.get('datasets')
+
+        simplifiedform = SimplifiedQueryForm(request.POST, prefix = 'simplifiedform')
+        form = QueryForm(request.POST)
+
+        # Form Validation here... is turned off
+        form.is_valid() # ignore output
+        extended = form.cleaned_data['extended']
+
+        selected_datasets = set(request.POST.getlist("datasets", []))
+        filters = set( f for f in request.POST.getlist("filters", []) if f )
+
+        LOG.debug('selected_datasets: %s', selected_datasets )
+        LOG.debug('filters: %s', filters )
+        
+        ctx = { 'user': user,
+                'selected_datasets': selected_datasets,
+                'filters': filters,
+                'simplifiedform': simplifiedform,
+                'form': form,
+                'beacon': beacon_info,
+                'assemblyIds': settings.BEACON_ASSEMBLYIDS, # same for everyone
+                'chromosomes': chain(range(1,22), ('X','Y','MT')),
+        }
+        
+        params_d = {}
+        if extended:
+            for field in form:
+                # if field.label == 'csrfmiddlewaretoken':
+                #     continue
+
+                if field.name == 'extended':
+                    continue
+                
+                value = field.value()
+                if value:
+                    params_d[field.name] = value
+            
+        else:
+            pass
+
+        #params_d['datasets'] = ','.join(selected_datasets) if selected_datasets else 'all'
+        if selected_datasets:
+            params_d['datasets'] = ','.join(selected_datasets) 
+        if filters:
+            params_d['filters'] = ','.join(filters)
+
+        # Don't check anything and forward to backend
+        query_url = settings.BEACON_ENDPOINT + 'query?' + urlencode(params_d, safe=',')
+        LOG.debug('Forwarding to %s',query_url)
+
+        r = requests.get(query_url)
+        if not r:
+            return render(request, 'error.html', {'message':'Backend not available' })
 
         results = None
         if r.status_code == 200:
             results = r.json()
         LOG.debug('Results: %s', results)
 
-        LOG.debug('RESULTS  end %s', '-'*30)
-        ctx = { 'user': user, 'form':form, 'datasets':datasets, 'all_ds': all_ds, 'error': data.get('error'), 'results': results }
-        return render(request, 'results.html', ctx)
+        ctx['results'] = results # overriding
+        return render(request, 'info.html', ctx)
 
 
+class BeaconAccessLevelsView(TemplateView):
+
+    def get(self, request):
+
+        query_url = settings.BEACON_ENDPOINT + 'access_levels'
+        if request.GET:
+            query_url += '?' + request.GET.urlencode()
+
+        LOG.info('Contacting Beacon backend: %s', query_url)
+        headers = { 'Accept': 'application/json',
+                    'Content-type': 'application/json',
+        }
+        params = {}
+        # if access_token: # we have a user
+        #     params['auth'] = 'yes'
+        #     headers['Authorization'] = 'Bearer ' + access_token
+
+        resp = requests.get(query_url, headers=headers, params=params)
+        if resp.status_code > 200:
+            return render(request, 'error.html', {'message':'Backend not available' })
+
+        ctx = resp.json()
+        #LOG.debug(ctx.get('datasets'))
+        ctx['includeFieldDetails'] = True if request.GET.get('includeFieldDetails', 'false') == 'true' else False
+        ctx['includeDatasetDifferences'] = True if request.GET.get('includeDatasetDifferences', 'false') == 'true' else False
+
+        # LOG.debug('GET includeFieldDetails: %s', request.GET.get('includeFieldDetails'))
+        # LOG.debug('GET includeDatasetDifferences: %s', request.GET.get('includeDatasetDifferences'))
+        # LOG.debug('GET includeFieldDetails ctx: %s', ctx['includeFieldDetails'])
+        # LOG.debug('GET includeDatasetDifferences ctx: %s', ctx['includeDatasetDifferences'])
+        return render(request, 'access_levels.html', ctx)

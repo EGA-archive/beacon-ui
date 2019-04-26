@@ -1,26 +1,40 @@
-import logging
+from urllib.parse import urlencode
+from itertools import chain
 
+from django.http import QueryDict
 from django import forms
+from django.conf import settings
 
-LOG = logging.getLogger(__name__)
-
-def chromosomes_choices():
-    for i in range(1,22):
-        yield (i,i)
-    for i in ('X','Y','MT'):
-        yield (i,i)
-
-class QueryForm(forms.Form):
+class SimplifiedQueryForm(forms.Form):
 
     # data-lpignore=true to ignore LastPass injected code
 
-    # Datasets is coded by hand
+    assemblyID = forms.ChoiceField(required=True,
+                                   choices=( (i,i) for i in settings.BEACON_ASSEMBLYIDS ),
+                                   label='Assembly Id')
 
-    assemblyID = forms.CharField(label='Assembly Id',
-                                 widget=forms.TextInput(attrs={'data-lpignore':'true', 'disabled':'true'}))
+    query = forms.RegexField(required=True,
+                             label='Simplified Query',
+                             widget=forms.TextInput(attrs={'data-lpignore':'true',
+                                                           'placeholder': '10 : 12345 A > T'}),
+                             strip = True,
+                             regex = r'')
+
+    
+
+
+class QueryForm(forms.Form):
+
+    extended = forms.BooleanField(required=False, initial=True)
+
+    # data-lpignore=true to ignore LastPass injected code
+
+    assemblyId = forms.ChoiceField(required=True,
+                                   choices=( (i,i) for i in settings.BEACON_ASSEMBLYIDS ),
+                                   label='Assembly Id')
 
     referenceName = forms.ChoiceField(required=True,
-                                      choices=chromosomes_choices,
+                                      choices=( (i,i) for i in chain( range(1,22),('X','Y','MT')) ),
                                       label='Reference Name')
 
     start    = forms.IntegerField(required=False, label='Start')
@@ -43,6 +57,65 @@ class QueryForm(forms.Form):
     variantType = forms.CharField(required=False, label='Variant Type',
                                      widget=forms.TextInput(attrs={'data-lpignore':'true'}))
 
-    includeDatasetResponses = forms.ChoiceField(required=False,
+    includeDatasetResponses = forms.ChoiceField(required=True,
                                                 choices=( (i,i) for i in ('All','Hit','Miss','None') ),
-                                                label='Include Datasets')
+                                                label='Included Dataset Responses')
+
+
+class BeaconQueryDict():
+
+    multiple_fields = ("datasets", "filters")
+
+    # Translate true and false strings to boolean values.
+    values = {'true': True, 'false': False, 'on': True, 'off': False}
+
+    def __init__(self, data):
+        self.data = data or QueryDict()
+
+    def to_dict(self):
+        
+        d = {}
+        for k in self.data:
+
+            if k == 'csrfmiddlewaretoken':
+                continue
+
+            if k in self.multiple_fields:
+                v = [v for v in self.data.getlist(k) if v] # might be an array of empty values
+                if v: # if someone survived
+                    d[k] = v
+                continue
+
+            value = self.data.get(k)
+            if value:
+                if isinstance(value, str):
+                    value = self.values.get(value.lower(), value)
+                d[k] = value
+        return d
+
+    def serialize(self):
+        d = {}
+        for k in self.data:
+
+            if k == 'csrfmiddlewaretoken':
+                continue
+
+            if k in self.multiple_fields:
+                v = [v for v in self.data.getlist(k) if v] # might be an array of empty values
+                if v: # if someone survived
+                    d[k] = ','.join(v)
+                continue
+
+            value = self.data.get(k)
+            if value:
+                d[k] = value
+        return urlencode(d, safe=',')
+
+    def __str__(self):
+        return str(self.to_dict())
+
+    def __repr__(self):
+        return str(self.serialize())
+
+
+

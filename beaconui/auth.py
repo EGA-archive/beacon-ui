@@ -11,14 +11,22 @@ from django.contrib.auth import logout
 
 LOG = logging.getLogger(__name__)
 
-class EGABeaconLoginView(TemplateView):
+IDP_URL = 'https://egatest.crg.eu/idp/'
+CLIENT_ID='beaconUI'
+CLIENT_SECRET='NWjr_uGUafUt7KVyn-kZDvSIN9EzRC0bW9OzBur7KYuhpMzuImDRDwdfsTqj6ldjGb3ZlZ2n4RXJJNim-KepWA'
+SCOPE='profile email openid'
+AUTHORIZE_URL = IDP_URL + 'authorize?'
+ACCESS_TOKEN_URL = IDP_URL + 'token'
+USER_INFO_URL = IDP_URL + 'userinfo'
+
+class BeaconLoginView(TemplateView):
 
     def get(self, request):
 
         access_token = request.session.get('access_token')
         if access_token:
             LOG.debug('Token: %s', access_token)
-            return HttpResponseRedirect(reverse('info'))
+            return HttpResponseRedirect(reverse('beacon'))
 
         code = request.GET.get('code')
         if code is None:
@@ -84,9 +92,9 @@ class EGABeaconLoginView(TemplateView):
         LOG.info('The user is: %r', user)
         request.session['user'] = user
 
-        return HttpResponseRedirect(reverse('info'))
+        return HttpResponseRedirect(reverse('beacon'))
 
-class EGABeaconLogoutView(TemplateView):
+class BeaconLogoutView(TemplateView):
 
     def get(self, request):
         LOG.info('Logging out: %s', request.session.get('user'))

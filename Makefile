@@ -37,3 +37,4 @@ exec:
 db:
 	rm -rf db.sqlite
 	python manage.py migrate
+
