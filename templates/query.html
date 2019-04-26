@@ -8,62 +8,36 @@
 
       {% csrf_token %}
       
-      {% if results.error %}
+      {% if results.error or form.errors %}
       <section id="query-errors">
+	{% if results.error %}
 	<div class="error-{{ error.errorCode }}">
 	  {{ results.error.message }}
 	</div>
+	{% endif %}
+
+	{% for field in form %}
+        {% for error in field.errors %}
+	<div class="error-{{ error.errorCode }}">
+	  {{ error }}
+	</div>
+        {% endfor %}
+	{% endfor %}
+
       </section>
       {% endif %}
 
-      <pre>{{ formdata }}</pre>
-      <pre>{{ formdata.extended }}</pre>
-
-      {{ form.extended.label_tag }} {{ form.extended }}
-      <section id="simplified-query">
-	{{ simplifiedform.assemblyID }}
-	{{ simplifiedform.query }}
+      <section id="query">
+	{{ form.assemblyId }}
+	{{ form.query }}
 	<button type="submit">Search</button>
       </section>
 
-      <section id="extended-query">
-	<fieldset>
-	  {{ form.assemblyId.label_tag }} {{ form.assemblyId }}
-	</fieldset>     
+      <fieldset id="include-dataset-responses">
+	{{ form.includeDatasetResponses.label_tag }} {{ form.includeDatasetResponses }} 
+      </fieldset>
 
-	<fieldset>
-	  {{ form.referenceName.label_tag }} {{ form.referenceName }}
-	</fieldset>       
-
-	<fieldset>
-	  {{ form.start.label_tag }} {{ form.start }}
-	  {{ form.startMin.label_tag }} {{ form.startMin }}
-	  {{ form.startMax.label_tag }} {{ form.startMax }}
-	</fieldset>       
-
-	<fieldset>
-	  {{ form.end.label_tag }} {{ form.end }}
-	  {{ form.endMin.label_tag }} {{ form.endMin }}
-	  {{ form.endMax.label_tag }} {{ form.endMax }}
-	</fieldset>       
-
-	<fieldset>
-	  {{ form.referenceBases.label_tag }} {{ form.referenceBases }}
-	</fieldset>       
-
-	<fieldset>
-	  {{ form.alternateBases.label_tag }} {{ form.alternateBases }}
-	</fieldset>       
-
-	<fieldset>
-	  {{ form.variantType.label_tag }} {{ form.variantType }}
-	</fieldset>       
-
-	<button type="submit">Search</button>
-      </section>
-
-
-      <fieldset id="query-datasets">
+    <fieldset id="query-datasets">
 	<legend>Dataset(s)</legend>
 	<span>All</span>/<span>None</span>
 
@@ -96,10 +70,6 @@
 	{% endfor %}
       </fieldset>
 
-      <fieldset id="include-dataset-responses">
-	{{ form.includeDatasetResponses.label_tag }} {{ form.includeDatasetResponses }} 
-      </fieldset>
-
       <fieldset id="query-filters">
 	<legend>Filters <i class="filter-add fas fa-plus-circle"></i></legend>
 	{% for f in filters %}
@@ -114,5 +84,6 @@
 	</section>
 	{% endfor %}
       </fieldset>
+
 
 </form>

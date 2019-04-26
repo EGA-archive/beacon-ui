@@ -115,6 +115,7 @@ STATICFILES_DIRS = [ # additional
 #BEACON_ENDPOINT = 'https://ega.crg.eu/requesterportal/v1/beacon/'
 BEACON_ENDPOINT = 'http://localhost:10000/elixirbeacon/v1/beacon/'
 
+#BEACON_ENDPOINT = 'http://dev.clinbioinfosspa.es:9076/elixirbeacon/v1/beacon/'
 
 #########################################################################
 # Fetch info, datasets and assemblyIds

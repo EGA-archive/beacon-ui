@@ -23,7 +23,13 @@
 
     {% if response and not response.error %}
     <main id="results">
-      {% include 'result.latest.html' %}
+      <p><a href={{ query }}>{{ query|safe }}</a></p>
+      <hr/>
+      {% include 'result.html' %}
+      <hr/>
+      <pre>
+	{{ response|pprint|safe }}
+      </pre>
     </main>
     {% else %}
     <main id="info">

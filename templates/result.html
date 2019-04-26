@@ -1,33 +1,57 @@
 <table>
   <thead>
     <tr>
-      <th>Chr</th>
+      {% if response.datasetAlleleResponses %}
+      <th>Dataset</th>
+      {% endif %}
+      <th>Chromosome</th>
       <th>Start</th>
-      <th>Ref</th>
-      <th>Alt</th>
-      <th>Ass</th>
+      <th>Reference Bases</th>
+      <th>Alternate Bases</th>
+      <th>Assembly Id</th>
+      {% if response.datasetAlleleResponses %}
+      <th>Sample Count</th>
+      <th>Variant Count</th>
+      {% endif %}
       <th>Exists</th>
     </tr>
   </thead>
   <tbody>
-    {% for ds in result.datasetAlleleResponses %}
+    {% with response.alleleRequest as r %}
+    {% for ds in response.datasetAlleleResponses %}
     <tr>
-      <td>{{ ds.referenceName }}</td>
-      <td>{{ ds.start }}</td>
-      <td>{{ ds.referenceBase }}</td>
-      <td>{{ ds.alternateBase }}</td>
-      <td>{{ ds.assembyId }}</td>
+      <td>{{ ds.datasetId }}</td>
+      <td>{{ r.referenceName }}</td>
+      <td>{{ r.start }}</td>
+      <td>{{ r.referenceBases }}</td>
+      <td>{{ r.alternateBases }}</td>
+      <td>{{ r.assemblyId }}</td>
+      <td>{{ ds.sampleCount|default:'-' }}</td>
+      <td>{{ ds.variantCount|default:'-' }}</td>
       <td>{{ ds.exists }}</td>
     </tr>
+    {% if ds.datasetHandover %}
+    <tr>
+      <td colspan=9>{{ ds.datasetHandover|safe }}</td>
+    </tr>
+    {% endif %}
     {% empty %}
     <tr>
-      <td>{{ result.referenceName }}</td>
-      <td>{{ result.start }}</td>
-      <td>{{ result.referenceBase }}</td>
-      <td>{{ result.alternateBase }}</td>
-      <td>{{ result.assembyId }}</td>
-      <td>{{ result.exists }}</td>
+      <td>{{ r.referenceName }}</td>
+      <td>{{ r.start }}</td>
+      <td>{{ r.referenceBases }}</td>
+      <td>{{ r.alternateBases }}</td>
+      <td>{{ r.assemblyId }}</td>
+      <td>{{ response.exists }}</td>
+    </tr>
+    {% for handover in response.beaconHandover %}
+    <tr>
+      <td colspan=9>
+	<a href="{{ handover.url|safe }}">{{ handover.handoverType.label }}</a>
+      </td>
     </tr>
     {% endfor %}
+    {% endfor %}
+    {% endwith %}
   </tbody>
 </table>

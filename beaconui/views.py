@@ -4,7 +4,6 @@ import json
 import uuid
 import base64
 from urllib.parse import urlencode
-from itertools import chain
 
 import requests
 from django.shortcuts import render
@@ -14,7 +13,7 @@ from django.conf import settings
 from django.contrib.auth import logout
 
 from .info import with_info
-from .forms import BeaconQueryDict, SimplifiedQueryForm, QueryForm
+from .forms import QueryForm
 
 LOG = logging.getLogger(__name__)
 
@@ -29,12 +28,11 @@ class BeaconView(TemplateView):
         user = request.session.get('user')
 
         ctx = { 'user': user,
-                'formdata': BeaconQueryDict(None),
                 'form': QueryForm(),
-                'simplifiedform': SimplifiedQueryForm(prefix = 'simplifiedform'),
                 'beacon': beacon_info,
                 'assemblyIds': settings.BEACON_ASSEMBLYIDS, # same for everyone
-                'chromosomes': chain(range(1,22), ('X','Y','MT')),
+                'selected_datasets': [],
+                'filters': [],
         }
         return render(request, 'info.html', ctx)
 
@@ -43,12 +41,7 @@ class BeaconView(TemplateView):
 
         user = request.session.get('user')
 
-        simplifiedform = SimplifiedQueryForm(request.POST, prefix = 'simplifiedform')
         form = QueryForm(request.POST)
-
-        # Form Validation here... is turned off
-        form.is_valid() # ignore output
-        extended = form.cleaned_data['extended']
 
         selected_datasets = set(request.POST.getlist("datasets", []))
         filters = set( f for f in request.POST.getlist("filters", []) if f )
@@ -57,30 +50,24 @@ class BeaconView(TemplateView):
         LOG.debug('filters: %s', filters )
         
         ctx = { 'user': user,
-                'selected_datasets': selected_datasets,
-                'filters': filters,
-                'simplifiedform': simplifiedform,
                 'form': form,
                 'beacon': beacon_info,
                 'assemblyIds': settings.BEACON_ASSEMBLYIDS, # same for everyone
-                'chromosomes': chain(range(1,22), ('X','Y','MT')),
+                'selected_datasets': selected_datasets,
+                'filters': filters,
         }
-        
-        params_d = {}
-        if extended:
-            for field in form:
-                # if field.label == 'csrfmiddlewaretoken':
-                #     continue
 
-                if field.name == 'extended':
-                    continue
-                
-                value = field.value()
-                if value:
-                    params_d[field.name] = value
-            
-        else:
-            pass
+        # Form validation... for the regex
+        if not form.is_valid():
+            return render(request, 'info.html', ctx)
+
+        # Valid Form 
+        params_d = form.query_deconstructed_data
+        LOG.debug('Deconstructed Data: %s', params_d)
+
+        # These are required
+        params_d['includeDatasetResponses'] = form.cleaned_data.get('includeDatasetResponses')
+        params_d['assemblyId'] = form.cleaned_data.get('assemblyId') 
 
         #params_d['datasets'] = ','.join(selected_datasets) if selected_datasets else 'all'
         if selected_datasets:
@@ -102,6 +89,7 @@ class BeaconView(TemplateView):
         LOG.debug('Response: %s', response)
 
         ctx['response'] = response
+        ctx['query'] = query_url
         return render(request, 'info.html', ctx)
 
 
