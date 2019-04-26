@@ -21,13 +21,9 @@
     {% include 'header.html' %}
     {% include 'query.html' %}
 
-    {% if results and not results.error %}
+    {% if response and not response.error %}
     <main id="results">
       {% include 'result.latest.html' %}
-      <hr />
-      {% for r in oldResults %}
-         {% include 'result.html' with result=r %}
-      {% endfor %}
     </main>
     {% else %}
     <main id="info">

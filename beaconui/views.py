@@ -96,12 +96,12 @@ class BeaconView(TemplateView):
         if not r:
             return render(request, 'error.html', {'message':'Backend not available' })
 
-        results = None
+        response = None
         if r.status_code == 200:
-            results = r.json()
-        LOG.debug('Results: %s', results)
+            response = r.json()
+        LOG.debug('Response: %s', response)
 
-        ctx['results'] = results # overriding
+        ctx['response'] = response
         return render(request, 'info.html', ctx)
 
 

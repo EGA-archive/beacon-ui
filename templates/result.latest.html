@@ -1,4 +1,4 @@
-<table class="latest-results">
+<table>
   <thead>
     <tr>
       <th>Chr</th>
@@ -10,23 +10,23 @@
     </tr>
   </thead>
   <tbody>
-    {% for ds in result.datasetAlleleResponses %}
+    {% for ds in response.datasetAlleleResponses %}
     <tr>
       <td>{{ ds.referenceName }}</td>
       <td>{{ ds.start }}</td>
       <td>{{ ds.referenceBase }}</td>
       <td>{{ ds.alternateBase }}</td>
-      <td>{{ ds.assembyId }}</td>
+      <td>{{ ds.assemblyId }}</td>
       <td>{{ ds.exists }}</td>
     </tr>
     {% empty %}
     <tr>
-      <td>{{ result.referenceName }}</td>
-      <td>{{ result.start }}</td>
-      <td>{{ result.referenceBase }}</td>
-      <td>{{ result.alternateBase }}</td>
-      <td>{{ result.assembyId }}</td>
-      <td>{{ result.exists }}</td>
+      <td>{{ response.alleleRequest.referenceName }}</td>
+      <td>{{ response.alleleRequest.start }}</td>
+      <td>{{ response.alleleRequest.referenceBases }}</td>
+      <td>{{ response.alleleRequest.alternateBases }}</td>
+      <td>{{ response.alleleRequest.assemblyId }}</td>
+      <td>{{ response.exists }}</td>
     </tr>
     {% endfor %}
   </tbody>
