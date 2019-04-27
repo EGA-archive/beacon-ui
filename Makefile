@@ -8,6 +8,18 @@ IMG=egarchive/beacon-frontend
 
 .PHONY: server build up down log exec
 
+export BEACON_INFO_ENDPOINT=http://localhost:10000/elixirbeacon/v1/beacon/?limit=0
+export BEACON_QUERY_ENDPOINT=http://localhost:10000/elixirbeacon/v1/beacon/query?
+export BEACON_ACCESS_LEVELS_ENDPOINT=http://localhost:10000/elixirbeacon/v1/beacon/access_levels
+
+# export BEACON_INFO_ENDPOINT=http://dev.clinbioinfosspa.es:9076/elixirbeacon/v1/beacon/
+# export BEACON_QUERY_ENDPOINT=http://dev.clinbioinfosspa.es:9076/elixirbeacon/v1/beacon/query?
+# export BEACON_ACCESS_LEVELS_ENDPOINT=http://dev.clinbioinfosspa.es:9076/elixirbeacon/v1/beacon/access_levels
+
+# export BEACON_INFO_ENDPOINT=https://egatest.crg.eu/csvs_beacon/
+# export BEACON_QUERY_ENDPOINT=https://egatest.crg.eu/csvs_beacon/genomic_region?
+# export BEACON_ACCESS_LEVELS_ENDPOINT=https://egatest.crg.eu/csvs_beacon/access_levels
+
 server:
 	@aiohttp-wsgi-serve beaconui.wsgi:application --static /static=./static --host $(HOST) --port $(PORT)
 

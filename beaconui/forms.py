@@ -3,10 +3,10 @@ from urllib.parse import urlencode
 import re
 
 from django import forms
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from .info import BEACON_ASSEMBLYIDS  # same for everyone
 LOG = logging.getLogger(__name__)
 
 
@@ -39,26 +39,30 @@ def deconstruct_query(query):
         return d
     return None
 
+class IncludeDatasetResponsesWidget(forms.RadioSelect):
+    template_name='include_dataset_responses.html'
+    
+    
 class QueryForm(forms.Form):
 
     assemblyId = forms.ChoiceField(required=True,
-                                   choices=( (i,i) for i in settings.BEACON_ASSEMBLYIDS ),
+                                   choices=( (i,i) for i in BEACON_ASSEMBLYIDS ),
                                    label='Assembly Id')
 
     query = forms.CharField(
         strip=True,
         required=True,
         label='Simplified Query',
-        error_messages = { 'required': "Eh? ....empty query....say something!"},
+        error_messages = { 'required': "Eh? ... what was the query again?"},
         widget=forms.TextInput(attrs={'data-lpignore':'true', # data-lpignore=true to ignore LastPass injected code
-                                      'placeholder': '10 : 12345 A > T'}),
+                                      'placeholder': 'For example  10 : 12345 A > T'}),
     )
 
     includeDatasetResponses = forms.ChoiceField(required=True,
-                                                choices=( (i.upper(),i) for i in ('All','Hit','Miss','None') ),
-                                                label='Included Dataset Responses',
-                                                #widget=forms.RadioSelect(),
-                                                initial='NONE')
+                                                  choices=( (i.upper(),i) for i in ('All','Hit','Miss','None') ),
+                                                  label='Included Dataset Responses',
+                                                  widget=IncludeDatasetResponsesWidget,
+                                                  initial='NONE')
     
 
     def is_valid(self):

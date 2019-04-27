@@ -7,13 +7,15 @@ from urllib.parse import urlencode
 
 import requests
 from django.shortcuts import render
-from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect, QueryDict
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.contrib.auth import logout
+from django.core.cache import cache
 
-from .info import with_info
+from . import info  # will prefetch the beacon info
 from .forms import QueryForm
+
 
 LOG = logging.getLogger(__name__)
 
@@ -22,24 +24,36 @@ LOG = logging.getLogger(__name__)
 class BeaconView(TemplateView):
 
     # If the user is not logged-in, the beacon_info are already cached
-    @with_info
+    @info.fetch
     def get(self, request, user, access_token, beacon_info):
 
         user = request.session.get('user')
+        user_id = user.get('sub') if user else None
+        LOG.info('User id: %s', user_id )
+
+        form = QueryForm()
+        if settings.DEBUG:
+            q = QueryDict(mutable=True)
+            q['query'] = "1 : 23 A > T"
+            q['assemblyId'] = 'GRCh37'
+            q['includeDatasetResponses'] = 'ALL'
+            form = QueryForm(q)
 
         ctx = { 'user': user,
-                'form': QueryForm(),
+                'form': form,
                 'beacon': beacon_info,
-                'assemblyIds': settings.BEACON_ASSEMBLYIDS, # same for everyone
+                'assemblyIds': info.BEACON_ASSEMBLYIDS, # same for everyone
                 'selected_datasets': [],
-                'filters': [],
+                'filters': [] if not settings.DEBUG else ["HP:0011007>=49", "PATO:0000383", "EFO:0009656"],
         }
         return render(request, 'info.html', ctx)
 
-    @with_info
+    @info.fetch
     def post(self, request, user, access_token, beacon_info):
 
         user = request.session.get('user')
+        user_id = user.get('sub') if user else None
+        LOG.info('User id: %s', user_id )
 
         form = QueryForm(request.POST)
 
@@ -48,14 +62,16 @@ class BeaconView(TemplateView):
 
         LOG.debug('selected_datasets: %s', selected_datasets )
         LOG.debug('filters: %s', filters )
-        
-        ctx = { 'user': user,
-                'form': form,
-                'beacon': beacon_info,
-                'assemblyIds': settings.BEACON_ASSEMBLYIDS, # same for everyone
-                'selected_datasets': selected_datasets,
-                'filters': filters,
+
+        ctx_base = { 'user': user,
+                     'assemblyIds': info.BEACON_ASSEMBLYIDS, # same for everyone
+                     'beacon': beacon_info,
         }
+        
+        ctx = ctx_base.copy()
+        ctx['form'] = form
+        ctx['selected_datasets'] = selected_datasets
+        ctx['filters'] = filters
 
         # Form validation... for the regex
         if not form.is_valid():
@@ -76,7 +92,12 @@ class BeaconView(TemplateView):
             params_d['filters'] = ','.join(filters)
 
         # Don't check anything and forward to backend
-        query_url = settings.BEACON_ENDPOINT + 'query?' + urlencode(params_d, safe=',')
+        
+        query_url = os.getenv('BEACON_QUERY_ENDPOINT')
+        if not query_url:
+            return render(request, 'error.html', {'message':'BEACON_QUERY_ENDPOINT environment variable missing' })
+ 
+        query_url += urlencode(params_d, safe=',')
         LOG.debug('Forwarding to %s',query_url)
 
         r = requests.get(query_url)
@@ -89,15 +110,56 @@ class BeaconView(TemplateView):
         LOG.debug('Response: %s', response)
 
         ctx['response'] = response
-        ctx['query'] = query_url
+        ctx['query_url'] = query_url
+
+        # key = make_cache_key(chain([user_id], params_d.keys(), params_d.value()))
+        # cache.set(key, ctx)
+        oldResults = request.session.get('oldResults', [])
+        ctx_base['query_url'] = query_url
+        ctx_base['response'] = response
+        oldResults.append({
+            'ctx': ctx_base,
+            'formdata': request.POST,
+        })
+        request.session['oldResults'] = oldResults
+        LOG.debug('Adding history to session [%d items]', len(request.session['oldResults']))
         return render(request, 'info.html', ctx)
 
 
+class BeaconHistoryView(TemplateView):
+
+    def get(self, request, index):
+
+        LOG.debug('Replay %d', index)
+        oldResults = request.session.get('oldResults', [])
+
+        try:
+            item = oldResults[index-1] # 1-based (cuz of url patterns) => 0-based
+            #LOG.debug('History item: %s', item)
+            formdata = item['formdata']
+            LOG.debug('History form data: %s', formdata)
+            selected_datasets = set(formdata.getlist("datasets", []))
+            filters = set( f for f in formdata.getlist("filters", []) if f )
+
+            ctx = item['ctx']
+            ctx['form'] = QueryForm(formdata)
+            ctx['selected_datasets'] = selected_datasets
+            ctx['filters'] = filters
+
+            return render(request, 'info.html', ctx)
+        except IndexError as e:
+            return render(request, 'error.html', { 'message': 'Nice try... you do not have history item number {}'.format(index)})
+            
+            
+        
 class BeaconAccessLevelsView(TemplateView):
 
     def get(self, request):
 
-        query_url = settings.BEACON_ENDPOINT + 'access_levels'
+        query_url = os.getenv('BEACON_ACCESS_LEVELS_ENDPOINT')
+        if not query_url:
+            return render(request, 'error.html', {'message':'BEACON_ACCESS_LEVELS_ENDPOINT environment variable missing' })
+
         if request.GET:
             query_url += '?' + request.GET.urlencode()
 
