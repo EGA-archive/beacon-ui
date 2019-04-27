@@ -21,6 +21,13 @@ LOG = logging.getLogger(__name__)
 
 ####################################
 
+def clean_empty_strings(iterable):
+    for item in iterable:
+        item = item.strip()
+        if item:
+            yield item
+    
+
 class BeaconView(TemplateView):
 
     # If the user is not logged-in, the beacon_info are already cached
@@ -58,7 +65,7 @@ class BeaconView(TemplateView):
         form = QueryForm(request.POST)
 
         selected_datasets = set(request.POST.getlist("datasets", []))
-        filters = set( f for f in request.POST.getlist("filters", []) if f )
+        filters = set( clean_empty_strings( request.POST.getlist("filters", []) ) )
 
         LOG.debug('selected_datasets: %s', selected_datasets )
         LOG.debug('filters: %s', filters )
