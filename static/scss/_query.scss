@@ -40,64 +40,6 @@ form#query {
     /* 	&:checked ~ #extended-query { display:block; } */
     /* } */
 
-    #query-filters {
-	grid-area: filters;
-	overflow:auto;
-	padding-bottom:1rem;
-
-	i { cursor:pointer; }
-	i.filter-add { display:inline-block; }
-
-	section {
-	    margin-bottom:0.5em;
-	
-	    input { 
-		width:90%;
-		box-sizing:border-box;
-		padding: .3em 1em;
-		border: 1px solid #DDDDDD;
-		outline: none;
-		
-		transition: box-shadow 200ms;
-		&::placeholder { color: #222; }
-		&:focus { box-shadow: 0 0 5px rgba(81, 203, 238, 1); }
-	    }
-	}
-
-    }
-
-    #query-datasets {
-	grid-area: datasets;
-	display:block;
-	position:relative;
-
-	> p {
-	    position:absolute; top:-1.3em; right:1em;
-	    line-height:1em;
-	    text-align:right; margin:0; padding:0;
-	    background-color:#f5f5f5;
-	    span {
-		margin:0 0.5ex;
-		cursor:pointer;
-	    }
-	}
-	section {
-	    overflow:auto;
-	    max-height:100%;
-	    box-sizing:border-box;
-	    padding:0 1em 1em;
-	    display:flex;
-	    flex-direction:column;
-	    justify-content:flex-start;
-
-	    label {
-		display: block; 
-		order: 1;
-		&.dataset-not-authorized { opacity: 0.5; text-decoration: line-through; order:2; }
-	    }
-	}
-    }
-
     #include-dataset-responses {
 	grid-area: include-responses;
 	border:0;
@@ -136,11 +78,13 @@ form#query {
 		width:100%;
 		box-sizing:border-box;
 		display: block;
-		padding: 0.8rem 1.6rem;
+		padding: 0.5rem 1.6rem;
 		border: 1px solid #DDDDDD;
 		outline: none;
 		border-radius: 0.4rem;
 		background-color:white;
+		text-align:center;
+		font-size:1.5em;
 		transition: box-shadow 200ms;
 		&::placeholder { color: #222; }
 		&:focus { border: 1px solid rgba(81, 203, 238, 1); box-shadow: 0 0 5px rgba(81, 203, 238, 1); }
@@ -186,6 +130,63 @@ form#query {
 
 	    &:active {
 		position:relative; top:1px;
+	    }
+	}
+    }
+
+    #query-datasets {
+	grid-area: datasets;
+	display:block;
+	position:relative;
+
+	> p {
+	    position:absolute; top:-1.3em; right:1em;
+	    line-height:1em;
+	    text-align:right; margin:0; padding:0;
+	    background-color:#f5f5f5;
+	    span {
+		margin:0 0.5ex;
+		cursor:pointer;
+	    }
+	}
+	section {
+	    overflow:auto;
+	    max-height:100%;
+	    box-sizing:border-box;
+	    padding:0 1em 1em;
+	    display:flex;
+	    flex-direction:column;
+	    justify-content:flex-start;
+
+	    label {
+		display: block; 
+		order: 1;
+		&.dataset-not-authorized { opacity: 0.5; text-decoration: line-through; order:2; }
+	    }
+	}
+    }
+
+    #query-filters {
+	grid-area: filters;
+	overflow:auto;
+	padding-bottom:1rem;
+
+	i { cursor:pointer; }
+	i.filter-add { display:inline-block; }
+
+	section {
+	    margin-bottom:0.5em;
+	
+	    input { 
+		width:90%;
+		box-sizing:border-box;
+		padding: .3em 1em;
+		border: 1px solid #DDDDDD;
+		outline: none;
+		
+		transition: box-shadow 200ms;
+		&::placeholder { color: #222; }
+		&:focus { box-shadow: 0 0 5px rgba(81, 203, 238, 1); }
 	    }
 	}
     }
