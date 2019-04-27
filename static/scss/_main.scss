@@ -1,11 +1,5 @@
 
 main {
-    /* grid-area: main; */
-    width:1140px; margin:0 auto;
-
-    padding:0 1em;
-    justify-content: stretch;
-    min-width:750px; max-width:100%;
 
     span.label {
 	display: inline;
@@ -33,7 +27,9 @@ main#info {
 	flex-flow: row no-wrap;
 	align-items: flex-start;
 	padding:0.5em 0;
-	border-bottom:1px solid #ccc;
+
+	border-top:1px solid #ccc;
+
 	max-width:100%;
 
 	> p { margin:0; padding: 0 1em;
@@ -41,7 +37,10 @@ main#info {
 	      white-space: nowrap;
 	      flex:1;
 	    }
-	> a { display:inline-block; margin:0; padding:0; }
+	> a {
+	    display:inline-block; margin:0; padding:0; text-decoration:none;
+	    .label { font-size:1em; }
+	}
 
     }
 }

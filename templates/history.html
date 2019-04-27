@@ -1,0 +1,9 @@
+<hr/>
+History items: {{ request.session.oldResults|length }}
+<hr/>
+{% for r in request.session.oldResults %}
+<a href="{% url 'history' forloop.counter %}">{{ forloop.counter }}</a>
+<br/>
+{{ r.ctx.query_url }}
+<hr />
+{% endfor %}

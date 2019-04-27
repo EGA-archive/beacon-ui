@@ -11,23 +11,46 @@ body {
   color: #636363;
   line-height:1.4;
 
-  header {
-      margin:0;
-      display:flex;
-      
-      width:1140px; margin:0 auto;
+  width:1140px; margin:1rem auto;
 
-      align-items: center;
-      flex-flow: row nowrap;
-      justify-content: flex-start;
+  header {
+
+      display:grid;
+      grid-template-columns: 200px 1fr 300px;
+      grid-template-rows: auto;
+      grid-template-areas: "icon title    nav"
+			   "icon subtitle nav";
+      justify-items: stretch;
+      align-items:center;
+      grid-column-gap:1rem;
       
-      a { display:inline-block; }
-      img { width:180px; display:block; margin-right:2rem; }
       
-      h1 { color:#1b5276; }
+      > a {
+	  grid-area:icon;
+      }
+      img {
+	  max-width:180px;
+	  display:block;
+      }
       
-      nav {
-	  margin-left: auto;
+      > h1 {
+	  grid-area: title;
+	  color:#1b5276;
+	  align-self:end;
+	  margin:0;
+      }
+
+      > h2 {
+	  grid-area: subtitle;
+	  align-self:start;
+	  font-size:70%;
+	  margin:0;
+      }
+      
+      > nav {
+	  grid-area:nav;
+	  justify-self:end;
+	  position:relative; right:-1em;
 	  a, span { margin-right:1em }
       }
   }

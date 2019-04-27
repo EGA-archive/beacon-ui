@@ -27,20 +27,27 @@
       </section>
       {% endif %}
 
-      <section id="query">
+      <fieldset id="query-search">
 	{{ form.assemblyId }}
-	{{ form.query }}
-	<button type="submit">Search</button>
-      </section>
+	<section>
+	  {{ form.query }}
+	  <label><span>Chromosome : Position ReferenceBase &gt; (AlternateBase|VariantType)</span> or <span>Chromosome : Start-End</span></label>
+	</section>
+	<button>
+	  <i class="fas fa-search"></i>
+	  Search
+	</button>
+      </fieldset>
 
       <fieldset id="include-dataset-responses">
 	{{ form.includeDatasetResponses.label_tag }} {{ form.includeDatasetResponses }} 
       </fieldset>
 
     <fieldset id="query-datasets">
-	<legend>Dataset(s)</legend>
-	<span>All</span>/<span>None</span>
+	<legend>Datasets</legend>
+	<p><span>All</span> / <span>None</span></p>
 
+	<section>
 	{% for d in beacon.datasets %}
 	{% for info in d.info %}
 	   {% comment %}
@@ -68,6 +75,7 @@
 
 	{% endfor %}
 	{% endfor %}
+	</section>
       </fieldset>
 
       <fieldset id="query-filters">
