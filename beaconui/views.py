@@ -30,13 +30,9 @@ def clean_empty_strings(iterable):
 
 class BeaconView(TemplateView):
 
-    # If the user is not logged-in, the beacon_info are already cached
+    # If the user is not logged-in, the beacon_info is already cached
     @info.fetch
-    def get(self, request, user, access_token, beacon_info):
-
-        user = request.session.get('user')
-        user_id = user.get('sub') if user else None
-        LOG.info('User id: %s', user_id )
+    def get(self, request, beacon_info):
 
         form = QueryForm()
         if settings.DEBUG:
@@ -46,8 +42,7 @@ class BeaconView(TemplateView):
             q['includeDatasetResponses'] = 'ALL'
             form = QueryForm(q)
 
-        ctx = { 'user': user,
-                'form': form,
+        ctx = { 'form': form,
                 'beacon': beacon_info,
                 'assemblyIds': info.BEACON_ASSEMBLYIDS, # same for everyone
                 'selected_datasets': [],
@@ -56,11 +51,7 @@ class BeaconView(TemplateView):
         return render(request, 'info.html', ctx)
 
     @info.fetch
-    def post(self, request, user, access_token, beacon_info):
-
-        user = request.session.get('user')
-        user_id = user.get('sub') if user else None
-        LOG.info('User id: %s', user_id )
+    def post(self, request, beacon_info):
 
         form = QueryForm(request.POST)
 
@@ -70,8 +61,7 @@ class BeaconView(TemplateView):
         LOG.debug('selected_datasets: %s', selected_datasets )
         LOG.debug('filters: %s', filters )
 
-        ctx_base = { 'user': user,
-                     'assemblyIds': info.BEACON_ASSEMBLYIDS, # same for everyone
+        ctx_base = { 'assemblyIds': info.BEACON_ASSEMBLYIDS, # same for everyone
                      'beacon': beacon_info,
         }
         

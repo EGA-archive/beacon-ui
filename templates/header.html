@@ -7,8 +7,8 @@
   <nav>
     <a href="{% url 'beacon' %}">Info</a>
     <a href="{% url 'levels' %}">Access Levels</a>
-    {% if user %}
-    <span>{{ user.nickname }}</span>
+    {% if request.session.user %}
+    <span>{{ request.session.user.nickname }}</span>
     <a href="{% url 'logout' %}">Logout</a>
     {% else %} 
     <a href="{% url 'login' %}">Login</a>

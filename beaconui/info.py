@@ -55,9 +55,11 @@ def _fetch(user, access_token = None):
 def fetch(func):
     def wrapper(self, request, *args, **kwargs):
         user = request.session.get('user')
+        LOG.debug('User: %s', user )
+        LOG.info('User id: %s', user.get('sub') if user else 'Anonymous' )
         access_token = request.session.get('access_token')
         beacon_info = _fetch(user, access_token = access_token)
-        return func(self, request, user, access_token, beacon_info, *args, **kwargs)
+        return func(self, request, beacon_info, *args, **kwargs)
     return wrapper
 
 

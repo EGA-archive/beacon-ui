@@ -1,9 +1,11 @@
-<hr/>
-History items: {{ request.session.oldResults|length }}
-<ol>
-{% for r in request.session.oldResults %}
-<li><a href="{% url 'history' forloop.counter %}">{{ r.formdata.query|stringformat:'s'|escape }}</a><br/>
-  {{ r.ctx.query_url }}
-</li>
-{% endfor %}
-</ol>
+<aside>
+  
+  <h1>History<span>{{ request.session.oldResults|length }}</span></h1>
+  
+  {% for r in request.session.oldResults %}
+  <section>
+    <a href="{% url 'history' forloop.counter %}">{{ r.formdata.query|stringformat:'s'|escape }}</a>
+    <p>{{ r.ctx.query_url }}</p>
+  </section>
+  {% endfor %}
+</aside>
