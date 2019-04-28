@@ -28,6 +28,9 @@ build:
                      --build-arg https_proxy="http://hellgate.local:8080" \
                      -t $(IMG) .
 
+shell:
+	@python manage.py shell -i python
+
 up:
 	docker run -d                                        \
 	           --name crg-$(CONTAINER)                   \

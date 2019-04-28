@@ -5,14 +5,15 @@ import re
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+#from django.utils.safestring import mark_safe
 
 from .info import BEACON_ASSEMBLYIDS  # same for everyone
 LOG = logging.getLogger(__name__)
 
 
 variantTypes = ('DEL:ME','INS:ME','DUP:TANDEM','DUP','DEL','INS','INV','CNV','SNP','MNP')
-regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2]) \: (\d+) ([ATCGN]+) \> (DEL:ME|INS:ME|DUP:TANDEM|DUP|DEL|INS|INV|CNV|SNP|MNP|[ATCGN]+)$', re.I)
-region_regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2]) \: (\d+)-(\d+)$', re.I)
+regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s+\:\s+(\d+)\s+([ATCGN]+)\s+\>\s+(DEL:ME|INS:ME|DUP:TANDEM|DUP|DEL|INS|INV|CNV|SNP|MNP|[ATCGN]+)$', re.I)
+region_regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s+\:\s+(\d+)-(\d+)$', re.I)
 
 
 def deconstruct_region_query(query):
@@ -59,10 +60,10 @@ class QueryForm(forms.Form):
     )
 
     includeDatasetResponses = forms.ChoiceField(required=True,
-                                                  choices=( (i.upper(),i) for i in ('All','Hit','Miss','None') ),
-                                                  label='Included Dataset Responses',
-                                                  widget=IncludeDatasetResponsesWidget,
-                                                  initial='NONE')
+                                                choices=( (i.upper(),i) for i in ('All','Hit','Miss','None') ),
+                                                label='Included Dataset Responses',
+                                                widget=IncludeDatasetResponsesWidget,
+                                                initial='NONE')
     
 
     def is_valid(self):
@@ -91,10 +92,17 @@ class QueryForm(forms.Form):
             return True
 
         # Invalid query
-        self.add_error('query', ValidationError(_('Invalid query: %(value)s must be of the form'
+        self.add_error('query', ValidationError(_('<p><code>%(value)s</code> must be of the form</p>'
                                                   '<ul>'
-                                                  '<li>Chromosome : Position ReferenceBase &gt; (AlternateBase|VariantType)</li>'
-                                                  '<li>Chromosome : Start-End</li>'
+                                                  '<li><span class="query-form">Regular Query</span>Chromosome : Position ReferenceBase &gt; (AlternateBase|VariantType)</li>'
+                                                  '<li><span class="query-form">Region Query</span>Chromosome : Start-End</li>'
+                                                  '</ul>'
+                                                  '<p>where</p>'
+                                                  '<ul>'
+                                                  '<li>Chromosome := 1-22, X, Y, or MT</li>'
+                                                  '<li>Position := a positive integer</li>'
+                                                  '<li>VariantType := either DEL:ME, INS:ME, DUP:TANDEM, DUP, DEL, INS, INV, CNV, SNP, or MNP</li>'
+                                                  '<li>ReferenceBase or AlternateBase := A combination of one or more A, T, C, G, or N</li>'
                                                   '</ul>'),
                                                 params={'value':query}))
 

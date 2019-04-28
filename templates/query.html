@@ -18,8 +18,11 @@
 
 	{% for field in form %}
         {% for error in field.errors %}
-	<div class="error-{{ error.errorCode }}">
-	  {{ error }}
+	<div class="error-wrapper">
+	  <h3>{{ field.name }}</h3>
+	  <div>
+	    {{ error|safe }}
+	  </div>
 	</div>
         {% endfor %}
 	{% endfor %}
