@@ -42,11 +42,15 @@ def _fetch(user, access_token = None):
             params['auth'] = 'yes'
             headers['Authorization'] = 'Bearer ' + access_token
 
-        resp = requests.get(query_url, headers=headers, params=params)
-        if resp.status_code > 200:
-            raise Http404('Backend not available')
+        # resp = requests.get(query_url, headers=headers, params=params)
+        # if resp.status_code > 200:
+        #     raise Http404('Backend not available')
 
-        beacon_info = resp.json()
+        # beacon_info = resp.json()
+        import json
+        with open('/Users/daz/_beacon/frontend/beacon.info.txt') as f:
+            beacon_info = json.load(f)
+
         LOG.info('Caching results with key: %s', cache_key)
         cache.set(cache_key, beacon_info)
         return beacon_info

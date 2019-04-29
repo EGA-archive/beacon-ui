@@ -97,13 +97,17 @@ class BeaconView(TemplateView):
         query_url += urlencode(params_d, safe=',')
         LOG.debug('Forwarding to %s',query_url)
 
-        r = requests.get(query_url)
-        if not r:
-            return render(request, 'error.html', {'message':'Backend not available' })
+        # r = requests.get(query_url)
+        # if not r:
+        #     return render(request, 'error.html', {'message':'Backend not available' })
 
-        response = None
-        if r.status_code == 200:
-            response = r.json()
+        # response = None
+        # if r.status_code == 200:
+        #     response = r.json()
+        import json
+        with open('/Users/daz/_beacon/frontend/beacon.query.txt') as f:
+            response = json.load(f)
+
         LOG.debug('Response: %s', response)
 
         ctx['response'] = response
@@ -117,6 +121,8 @@ class BeaconView(TemplateView):
         oldResults.append({
             'ctx': ctx_base,
             'formdata': request.POST,
+            'params': params_d,
+            'exists': 'Y' if response.get('exists', False) else 'N',
         })
         request.session['oldResults'] = oldResults
         LOG.debug('Adding history to session [%d items]', len(request.session['oldResults']))

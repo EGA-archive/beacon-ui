@@ -1,11 +1,24 @@
+{% load beacon %}
 <aside>
-  
-  <h1>History<span>{{ request.session.oldResults|length }}</span></h1>
+
+  <h1>History
+    {% if request.session.oldResults %}
+    <span>{{ request.session.oldResults|length }}</span>
+    {% endif %}
+  </h1>
   
   {% for r in request.session.oldResults %}
-  <section>
-    <a href="{% url 'history' forloop.counter %}">{{ r.formdata.query|stringformat:'s'|escape }}</a>
-    <p>{{ r.ctx.query_url }}</p>
-  </section>
+  <a href="{% url 'history' forloop.counter %}" data-count="{{ forloop.counter }}">
+    <h2 class="response-{{ r.exists }}">
+      [{{ r.formdata.assemblyId|stringformat:'s'|escape }}] {{ r.formdata.query|stringformat:'s'|escape }}
+    </h2>
+    <ul>
+      {% for k,v in r.params.items %}
+      <li>{{ k }}: {{ v }}</li>
+      {% endfor %}
+    </ul>
+  </a>
+  {% empty %}
+  <p>No previous query</p>
   {% endfor %}
 </aside>
