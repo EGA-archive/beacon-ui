@@ -1,0 +1,13 @@
+main#results {
+
+    /* display:flex; */
+
+    table {
+	/* flex-basis:30%; */
+	padding:1em;
+	border:1px solid red;
+	margin:0 auto;
+    }
+
+    pre { margin:0 auto; width: 80%; }
+}

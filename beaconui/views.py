@@ -37,8 +37,8 @@ class BeaconView(TemplateView):
         form = QueryForm()
         if settings.DEBUG:
             q = QueryDict(mutable=True)
-            q['query'] = "1 : 23 A > T"
-            q['assemblyId'] = 'GRCh37'
+            q['query'] = "1 : 13272 G > C"
+            q['assemblyId'] = 'grch37'
             q['includeDatasetResponses'] = 'ALL'
             form = QueryForm(q)
 
@@ -46,7 +46,7 @@ class BeaconView(TemplateView):
                 'beacon': beacon_info,
                 'assemblyIds': info.BEACON_ASSEMBLYIDS, # same for everyone
                 'selected_datasets': [],
-                'filters': [] if not settings.DEBUG else ["HP:0011007>=49", "PATO:0000383", "EFO:0009656"],
+                'filters': [] if not settings.DEBUG else ["ICD-10:XVI"],
         }
         return render(request, 'info.html', ctx)
 
@@ -55,7 +55,7 @@ class BeaconView(TemplateView):
 
         form = QueryForm(request.POST)
 
-        selected_datasets = set(request.POST.getlist("datasets", []))
+        selected_datasets = set(request.POST.getlist("datasetIds", []))
         filters = set( clean_empty_strings( request.POST.getlist("filters", []) ) )
 
         LOG.debug('selected_datasets: %s', selected_datasets )
@@ -84,7 +84,7 @@ class BeaconView(TemplateView):
 
         #params_d['datasets'] = ','.join(selected_datasets) if selected_datasets else 'all'
         if selected_datasets:
-            params_d['datasets'] = ','.join(selected_datasets) 
+            params_d['datasetIds'] = ','.join(selected_datasets) 
         if filters:
             params_d['filters'] = ','.join(filters)
 
@@ -105,7 +105,7 @@ class BeaconView(TemplateView):
         if r.status_code == 200:
             response = r.json()
 
-        LOG.debug('Response: %s', response)
+        #LOG.debug('Response: %s', response)
 
         ctx['response'] = response
         ctx['query_url'] = query_url
@@ -138,7 +138,7 @@ class BeaconHistoryView(TemplateView):
             #LOG.debug('History item: %s', item)
             formdata = item['formdata']
             LOG.debug('History form data: %s', formdata)
-            selected_datasets = set(formdata.getlist("datasets", []))
+            selected_datasets = set(formdata.getlist("datasetIds", []))
             filters = set( f for f in formdata.getlist("filters", []) if f )
 
             ctx = item['ctx']
@@ -154,7 +154,8 @@ class BeaconHistoryView(TemplateView):
         
 class BeaconAccessLevelsView(TemplateView):
 
-    def get(self, request):
+    @info.fetch
+    def get(self, request, beacon_info):
 
         query_url = os.getenv('BEACON_ACCESS_LEVELS_ENDPOINT')
         if not query_url:
@@ -177,12 +178,10 @@ class BeaconAccessLevelsView(TemplateView):
             return render(request, 'error.html', {'message':'Backend not available' })
 
         ctx = resp.json()
-        #LOG.debug(ctx.get('datasets'))
-        ctx['includeFieldDetails'] = True if request.GET.get('includeFieldDetails', 'false') == 'true' else False
-        ctx['includeDatasetDifferences'] = True if request.GET.get('includeDatasetDifferences', 'false') == 'true' else False
 
-        # LOG.debug('GET includeFieldDetails: %s', request.GET.get('includeFieldDetails'))
-        # LOG.debug('GET includeDatasetDifferences: %s', request.GET.get('includeDatasetDifferences'))
-        # LOG.debug('GET includeFieldDetails ctx: %s', ctx['includeFieldDetails'])
-        # LOG.debug('GET includeDatasetDifferences ctx: %s', ctx['includeDatasetDifferences'])
+        ctx['beacon'] = beacon_info
+
+        ctx['fieldsParam'] = True if request.GET.get('includeFieldDetails', 'false') == 'true' else False
+        ctx['datasetsParam'] = True if request.GET.get('displayDatasetDifferences', 'false') == 'true' else False
+
         return render(request, 'access_levels.html', ctx)

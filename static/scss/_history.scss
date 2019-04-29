@@ -35,8 +35,13 @@ aside {
 
 	transition: transform 300ms,
 	            font-size 300ms;
+
 	transform: rotate(90deg) translate(-180px,-310px);
 	transform-origin: 0 -100%;
+
+	/* transform: translateX(100%) rotate(90deg); */
+	/* transform-origin: 0 0; */
+
 	font-size: 1em;
 
     }
@@ -62,6 +67,8 @@ aside {
 	border: 1px solid #c6c6ff;
 	border-radius:1em;
 	&:hover { box-shadow: 0 2px 5px 0 rgba(0,0,0,.26); }
+
+	color:black;
 
 	position:relative;
 	&::before {
@@ -94,6 +101,7 @@ aside {
 
 	ul {
 	    padding: 0 1em 0 2em;
+
 	    li {word-break: break-all; }
 	}
 	

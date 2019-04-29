@@ -1,7 +1,7 @@
 <header>
   <a href="{{ beacon.organization.welcomeUrl }}"><img src="{{ beacon.organization.logoUrl }}" alt="{{ beacon.organization.name }}" /></a>
 
-  <h1>EGA Beacon</h1>
+  <h1>{{ beacon.name|default:'Beacon' }}</h1>
   <h2>{{ beacon.description|safe }}</h2>
 
   <nav>

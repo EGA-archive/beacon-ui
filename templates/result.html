@@ -47,7 +47,7 @@
     {% for handover in response.beaconHandover %}
     <tr>
       <td colspan=9>
-	<a href="{{ handover.url|safe }}">{{ handover.handoverType.label }}</a>
+	<a href="{{ handover.url|safe }}" title="{{ handover.note|safe }}">{{ handover.handoverType.label }}</a>
       </td>
     </tr>
     {% endfor %}

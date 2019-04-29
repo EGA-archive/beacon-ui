@@ -48,13 +48,15 @@ class QueryForm(forms.Form):
 
     assemblyId = forms.ChoiceField(required=True,
                                    choices=( (i,i) for i in BEACON_ASSEMBLYIDS ),
+                                   error_messages = { 'invalid_choice': ('<p>Select a valid choice.</p>'
+                                                                         '<p>%(value)s is not one of the available choices.</p>')},
                                    label='Assembly Id')
 
     query = forms.CharField(
         strip=True,
         required=True,
         label='Simplified Query',
-        error_messages = { 'required': "Eh? ... what was the query again?"},
+        error_messages = { 'required': "<p>Eh? ... what was the query again?</p>"},
         widget=forms.TextInput(attrs={'data-lpignore':'true', # data-lpignore=true to ignore LastPass injected code
                                       'placeholder': 'For example  10 : 12345 A > T'}),
     )

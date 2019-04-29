@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1.0, width=device-width, shrink-to-fit=no"/>
-    <title>EGA Beacon</title>
+    <title>{{ beacon.name|default:'Beacon' }}</title>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
 	  integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
@@ -13,6 +13,7 @@
 
     <link rel="stylesheet" href="//necolas.github.io/normalize.css/latest/normalize.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     <link rel="icon" href="//ega-archive.org/favicon.ico">
 
   </head>
@@ -23,10 +24,7 @@
 
     {% if response and not response.error %}
     <main id="results">
-      <p><a href={{ query }}>{{ query|safe }}</a></p>
       {% include 'result.html' %}
-
-      <pre>{{ response|pprint|safe }}</pre>
     </main>
     {% else %}
     <main id="info">
@@ -43,13 +41,18 @@
       {% for dataset in beacon.datasets %}
       <section>
 	<a href="//ega-archive.org/datasets/{{ dataset.id }}">
-	{% for info in dataset.info %}
-	{% if info.key == 'accessType' %}
-	<span class="label label-{{ info.value|lower }}">{{ dataset.id }}</span>
-	{% endif %}
-	{% empty %}
-	{{ dataset.id }}
-	{% endfor %}
+
+	  <span class="label label-{{ dataset.info.accessType|lower }}">{{ dataset.id }}</span>
+
+	  {% comment %}
+	  {% for info in dataset.info %}
+	  {% if info.key == 'accessType' %}
+	  <span class="label label-{{ info.value|lower }}">{{ dataset.id }}</span>
+	  {% endif %}
+	  {% empty %}
+	  {{ dataset.id }}
+	  {% endfor %}
+	  {% endcomment %}
 	</a>
 	<p>{{ dataset.description|default:'-' }}</p>
       </section>

@@ -1,0 +1,96 @@
+
+main#access-levels {
+
+    ul.collapsed {
+
+	list-style-type: none;
+
+	display:flex;
+	flex-flow: row wrap;
+
+	/* justify-content:space-between; */
+
+	.label {
+	    margin:1ex;
+	    display:inline-block;
+	    font-size:1em;
+	    /* color:black; */
+	}
+    }
+
+
+    ul.expanded {
+	
+	> li {
+	    border-top: 1px solid #ccc; padding-top:1em; margin-bottom:1em;
+
+	    display:flex;
+	    flex-flow: row nowrap;
+	    justify-content:flex-start;
+
+	    > span {
+		margin-right: 1em;
+		min-width: 15em;
+		display: inline-block;
+		text-align:right;
+		font-variant:small-caps;
+		font-weight:bold;
+	    }
+
+	    ul {
+		list-style-type: none;
+		margin:0; padding:0;
+
+		display:flex;
+		flex-flow: row wrap;
+
+		justify-content:flex-start;
+
+		.label {
+		    margin:0 1ex 0.5ex 0;
+		    display:inline-block;
+		    font-size:1em;
+		    /* color:black; */
+		}
+	    }
+	}
+    }
+
+
+    /* Datasets differences */
+    #access-levels-datasets {
+	small { margin-left:1em; }
+    }   
+    > ul:nth-of-type(2) {
+	column-count:4;
+	list-style-type: none;
+	margin:0; padding:0;
+	
+	li {
+	    text-align:center; 
+
+	    .label {
+		margin-left:1ex;
+	    }
+	}
+    }
+
+
+
+
+    #access-levels-legend {
+	display:flex;
+	justify-content: flex-end;
+	.label { margin:0 1ex;}
+	
+    }
+    > nav {
+	display:flex;
+	margin-top:1em;
+	justify-content: flex-end;
+	input { margin:0 1ex;}
+    }
+
+    
+
+}

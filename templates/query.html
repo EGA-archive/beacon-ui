@@ -52,31 +52,51 @@
 
 	<section>
 	{% for d in beacon.datasets %}
+
 	{% for info in d.info %}
-	   {% comment %}
+
 	   {% if info.authorized == 'true' %}
 	   <label>
-	     <input type="checkbox" name="datasets" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
+	     <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
 	     {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
 	   </label>
 	   {% endif %}
-	   {% endcomment %}
 
 	   {% if info.key == "authorized" %}
 	   {% if info.value == "true" %}
 	   <label>
-	     <input type="checkbox" name="datasets" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
+	     <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
 	     {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
 	   </label>
 	   {% else %}
 	   <label class="dataset-not-authorized">
-	     <input type="checkbox" disabled name="datasets" value="{{ d.id }}" />
+	     <input type="checkbox" disabled name="datasetIds" value="{{ d.id }}" />
 	     {{ d.id }}
 	   </label>
 	   {% endif %}
 	   {% endif %}
 
+	{% empty %}
+	<label>
+	  <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
+	  {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
+	</label>
 	{% endfor %}
+
+
+	{% if d.info.authorized %}
+	<label>
+	  <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
+	  {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
+	</label>
+	{% else %}
+	<label class="dataset-not-authorized">
+	  <input type="checkbox" disabled name="datasetIds" value="{{ d.id }}" />
+	  {{ d.id }}
+	</label>
+	{% endif %}
+
+	   
 	{% endfor %}
 	</section>
       </fieldset>

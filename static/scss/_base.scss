@@ -28,9 +28,11 @@ body {
       
       > a {
 	  grid-area:icon;
+	  justify-self:center;
       }
       img {
 	  max-width:180px;
+	  max-height:80px;
 	  display:block;
       }
       
@@ -39,12 +41,13 @@ body {
 	  color:#1b5276;
 	  align-self:end;
 	  margin:0;
+	  font-size:1.7em;
       }
 
       > h2 {
 	  grid-area: subtitle;
 	  align-self:start;
-	  font-size:70%;
+	  font-size:80%;
 	  margin:0;
       }
       

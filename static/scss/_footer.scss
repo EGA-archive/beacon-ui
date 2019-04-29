@@ -7,4 +7,44 @@ footer {
 
     background-color: #f5f5f5;
     color:#333;
+
+    display: flex;
+    section { position: relative; }
+    section::before { content: '|'; display:inline-block; margin:0 1em; }
+    section:first-of-type { margin-left:auto; } /* push it right */
+    section:first-of-type::before { content: none; }
+
+    label, input { cursor:pointer; }
+
+    strong::after { content: '|'; display:inline-block; margin:0 1em; }
+    strong:last-of-type::after { content: none; }
+
 }
+
+#beacon-response {
+    display: none; white-space: pre-wrap;
+    position:fixed; top:10vh; bottom:10vh; right:10vw; left:10vw;
+    box-shadow: 0 0 50px 0px #c3c3c3;
+    z-index:100;
+    background:white;
+    padding:1em;
+    overflow:auto;
+    box-sizing:border-box;
+    border:1px solid black;
+}
+
+#beacon-request {
+    display:none;
+    position:absolute; right:0; bottom:2em;
+    box-shadow: 0 0 50px 0px #c3c3c3;
+    width:60vw;
+    padding:1em;
+    box-sizing:border-box;
+    z-index:101;
+    background:white;
+    border:1px solid black;
+}
+
+
+input#beacon-request-trigger:checked ~ #beacon-request { display:block; }
+input#beacon-response-trigger:checked ~ #beacon-response { display:block; }
