@@ -1,57 +1,41 @@
-<table>
-  <thead>
-    <tr>
-      {% if response.datasetAlleleResponses %}
-      <th>Dataset</th>
-      {% endif %}
-      <th>Chromosome</th>
-      <th>Start</th>
-      <th>Reference Bases</th>
-      <th>Alternate Bases</th>
-      <th>Assembly Id</th>
-      {% if response.datasetAlleleResponses %}
-      <th>Sample Count</th>
-      <th>Variant Count</th>
-      {% endif %}
-      <th>Exists</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% with response.alleleRequest as r %}
-    {% for ds in response.datasetAlleleResponses %}
-    <tr>
-      <td>{{ ds.datasetId }}</td>
-      <td>{{ r.referenceName }}</td>
-      <td>{{ r.start }}</td>
-      <td>{{ r.referenceBases }}</td>
-      <td>{{ r.alternateBases }}</td>
-      <td>{{ r.assemblyId }}</td>
-      <td>{{ ds.sampleCount|default:'-' }}</td>
-      <td>{{ ds.variantCount|default:'-' }}</td>
-      <td>{{ ds.exists }}</td>
-    </tr>
+
+{% for ds in response.datasetAlleleResponses %}
+
+<section class="datasets-response exists-{{ ds.exists|yesno:'Y,N' }}">
+  <h3>{{ ds.datasetId }}</h3>
+  <ul>
+    {% if ds.sampleCount %}<li>Sample count: {{ ds.sampleCount }}</li>{% endif %}
+    {% if ds.variantCount %}<li>Variant count: {{ ds.variantCount }}</li>{% endif %}
+
     {% if ds.datasetHandover %}
-    <tr>
-      <td colspan=9>{{ ds.datasetHandover|safe }}</td>
-    </tr>
-    {% endif %}
-    {% empty %}
-    <tr>
-      <td>{{ r.referenceName }}</td>
-      <td>{{ r.start }}</td>
-      <td>{{ r.referenceBases }}</td>
-      <td>{{ r.alternateBases }}</td>
-      <td>{{ r.assemblyId }}</td>
-      <td>{{ response.exists }}</td>
-    </tr>
-    {% for handover in response.beaconHandover %}
-    <tr>
-      <td colspan=9>
-	<a href="{{ handover.url|safe }}" title="{{ handover.note|safe }}">{{ handover.handoverType.label }}</a>
-      </td>
-    </tr>
-    {% endfor %}
-    {% endfor %}
+    {% with ds.datasetHandover as handover %}
+    <li>Handover:
+      <a href="{{ handover.url|safe }}"{% if handover.note %} title="{{ handover.note|safe }}"{% endif %}>
+	{{ handover.handoverType.label }}
+      </a>
+    </li>
     {% endwith %}
-  </tbody>
-</table>
+    {% endif %}
+
+  </ul>
+</section>
+
+{% empty %}
+
+<section class="beacon-response exists-{{ response.exists|yesno:'Y,N' }}">
+  <h3>Exists: <span>{{ response.exists }}</span></h3>
+  {% if response.beaconHandover %}
+  <p>Handovers:</p>
+  <ul>
+    {% for handover in response.beaconHandover %}
+    <li>
+      <a href="{{ handover.url|safe }}"{% if handover.note %} title="{{ handover.note|safe }}"{% endif %}>
+	{{ handover.handoverType.label }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+
+{% endfor %}

@@ -1,5 +1,4 @@
 {% load static %}
-{% load beacon %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -22,9 +21,14 @@
     {% include 'header.html' %}
     {% include 'query.html' %}
 
-    {% if response and not response.error %}
+    {% if response %}
     <main id="results">
+      {% if response.error %}
+      <p>{{ response.error.errorCode }}</p>
+      <p>{{ response.error.message }}</p>
+      {% else %}
       {% include 'result.html' %}
+      {% endif %}
     </main>
     {% else %}
     <main id="info">

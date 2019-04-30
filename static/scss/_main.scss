@@ -11,6 +11,8 @@ main {
 	white-space: nowrap;
 	vertical-align: baseline;
 	border-radius: .25em;
+
+	/* background-color: #ccc; */ /* fallback */
 	
 	&.label-registered { background-color: #f0ad4e; }
 	&.label-public     { background-color: #5cb85c; }

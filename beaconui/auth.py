@@ -26,7 +26,7 @@ class BeaconLoginView(TemplateView):
         access_token = request.session.get('access_token')
         if access_token:
             LOG.debug('Token: %s', access_token)
-            return HttpResponseRedirect(reverse('beacon'))
+            return HttpResponseRedirect(request.GET.get('next', reverse('query')))
 
         code = request.GET.get('code')
         if code is None:
@@ -92,7 +92,7 @@ class BeaconLoginView(TemplateView):
         LOG.info('The user is: %r', user)
         request.session['user'] = user
 
-        return HttpResponseRedirect(reverse('beacon'))
+        return HttpResponseRedirect(reverse('query'))
 
 class BeaconLogoutView(TemplateView):
 

@@ -4,15 +4,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1.0, width=device-width, shrink-to-fit=no"/>
-    <title>Beacon | Privacy</title>
-    <link rel="icon" href="//ega-archive.org/favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet">
+    <title>{{ beacon.name|default:'Beacon' }} | Privacy</title>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
+	  integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+	  crossorigin="anonymous" />
+
     <link rel="stylesheet" href="//necolas.github.io/normalize.css/latest/normalize.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link rel="icon" href="//ega-archive.org/favicon.ico">
+
   </head>
-  <body class="open">
+  <body>
+
     {% include 'header.html' %}
-    {% include 'query.html' %}
 
     <main id="privacy">
       <p>

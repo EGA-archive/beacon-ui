@@ -1,5 +1,5 @@
 <form id="query"
-      action="{% url 'beacon' %}"
+      action=""
       method="post"
       accept-charset="UTF-8"
       autocomplete="off"
@@ -34,7 +34,7 @@
 	{{ form.assemblyId }}
 	<section>
 	  {{ form.query }}
-	  <label><span>Chromosome : Position ReferenceBase &gt; (AlternateBase|VariantType)</span> or <span>Chromosome : Start-End</span></label>
+	  {{ form.query.label_tag }}
 	</section>
 	<button>
 	  <i class="fas fa-search"></i>

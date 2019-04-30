@@ -8,30 +8,54 @@ IMG=egarchive/beacon-frontend
 
 .PHONY: server build up down log exec
 
-# # ####### EGA Beacon @ local-path
-# export BEACON_INFO_ENDPOINT=http://localhost:10000/elixirbeacon/v1/beacon/?limit=0
-# export BEACON_QUERY_ENDPOINT=http://localhost:10000/elixirbeacon/v1/beacon/query?
-# export BEACON_ACCESS_LEVELS_ENDPOINT=http://localhost:10000/elixirbeacon/v1/beacon/access_levels
+# # # ####### EGA Beacon @ local-path
+# export BEACON_BASE=http://localhost:10000/elixirbeacon/v1/beacon/?limit=0
+# export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
+# export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
+# export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
+# export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
+# export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
 
 # # ####### EGA Beacon
-# export BEACON_INFO_ENDPOINT=https://testbeacon.ega-archive.org/?limit=0
-# export BEACON_QUERY_ENDPOINT=https://testbeacon.ega-archive.org/query?
-# export BEACON_ACCESS_LEVELS_ENDPOINT=https://testbeacon.ega-archive.org/access_levels
+# export BEACON_BASE=https://testbeacon.ega-archive.org
+# export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
+# export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
+# export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
+# export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
+# export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
 
 # ####### OpenCGA @ Sevilla
-# export BEACON_INFO_ENDPOINT=http://dev.clinbioinfosspa.es:9075/elixirbeacon/v1/beacon/
-# export BEACON_QUERY_ENDPOINT=http://dev.clinbioinfosspa.es:9075/elixirbeacon/v1/beacon/query?
-# export BEACON_ACCESS_LEVELS_ENDPOINT=http://dev.clinbioinfosspa.es:9075/elixirbeacon/v1/beacon/access_levels
+# export BEACON_BASE=http://dev.clinbioinfosspa.es:9075/elixirbeacon/v1/beacon
+# export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
+# export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
+# export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
+# export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
+# export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
 
 ####### CSVS @ CRG
-export BEACON_INFO_ENDPOINT=https://egatest.crg.eu/csvs_beacon/
-export BEACON_QUERY_ENDPOINT=https://egatest.crg.eu/csvs_beacon/query?
-export BEACON_ACCESS_LEVELS_ENDPOINT=https://egatest.crg.eu/csvs_beacon/access_levels
+export BEACON_BASE=https://egatest.crg.eu/csvs_beacon
+export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
+export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
+export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
+export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
+export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
 
 # ####### CSVS @ Sevilla
-# export BEACON_INFO_ENDPOINT=http://dev.clinbioinfosspa.es:9076/elixirbeacon/v1/beacon/
-# export BEACON_QUERY_ENDPOINT=http://dev.clinbioinfosspa.es:9076/elixirbeacon/v1/beacon/query?
-# export BEACON_ACCESS_LEVELS_ENDPOINT=http://dev.clinbioinfosspa.es:9076/elixirbeacon/v1/beacon/access_levels
+# export BEACON_BASE=http://dev.clinbioinfosspa.es:9076/elixirbeacon/v1/beacon
+# export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
+# export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
+# export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
+# export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
+# export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
+
+# ####### Cafe Variome
+# export BEACON_BASE=https://beacondev.cafevariome.org/
+# export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
+# export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
+# export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
+# export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
+# export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
+
 
 server:
 	@aiohttp-wsgi-serve beaconui.wsgi:application --static /static=./static --host $(HOST) --port $(PORT)

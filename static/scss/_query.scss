@@ -103,8 +103,7 @@ form#query {
 		transition: opacity 300ms,
 		            visibility 0ms;
 
-		font-style:italic;
-		span { font-weight: bold; font-style:normal; }
+		font-weight: bold;
 	    }
 
 	    input:placeholder-shown + label { opacity: 0; visibility: hidden; }

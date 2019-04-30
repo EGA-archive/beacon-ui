@@ -5,13 +5,15 @@
   <h2>{{ beacon.description|safe }}</h2>
 
   <nav>
-    <a href="{% url 'beacon' %}">Info</a>
+    <a href="{% url 'query' %}">Query</a>
+    <a href="{% url 'genomic-region' %}">Region</a>
+    <a href="{% url 'genomic-snp' %}">SNP</a>
     <a href="{% url 'levels' %}">Access Levels</a>
     {% if request.session.user %}
     <span>{{ request.session.user.nickname }}</span>
     <a href="{% url 'logout' %}">Logout</a>
     {% else %} 
-    <a href="{% url 'login' %}">Login</a>
+    <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
     {% endif %}
   </nav>
 </header>

@@ -10,3 +10,7 @@ def pprint(d):
     s = StringIO()
     pretty_print.pprint(d, s, indent=4)
     return s.getvalue()
+
+@register.filter
+def space2underscore(v):
+    return v.replace(' ','_')
