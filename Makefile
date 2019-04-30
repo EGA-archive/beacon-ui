@@ -68,14 +68,13 @@ build:
 shell:
 	@python manage.py shell -i python
 
-MOU
-
 
 MOUNTPOINTS=-v $(shell pwd -P)/logger.yaml/beacon/logger.yaml \
 	    -v $(shell pwd -P)/manage.py:/beacon/manage.py    \
 	    -v $(shell pwd -P)/beaconui:/beacon/beaconui      \
 	    -v $(shell pwd -P)/static:/beacon/static          \
-	    -v $(shell pwd -P)/templates:/beacon/templates
+	    -v $(shell pwd -P)/templates:/beacon/templates    \
+	    -e LOG_YML=/beacon/logger.yaml
 
 up:
 	docker run -d                                        \
