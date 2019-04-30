@@ -22,15 +22,20 @@
     {% include 'query.html' %}
 
     {% if response %}
-    <main id="results">
+
       {% if response.error %}
-      <p>{{ response.error.errorCode }}</p>
-      <p>{{ response.error.message }}</p>
+      <main id="results-errors">
+	<p>{{ response.error.errorCode }}</p>
+	<p>{{ response.error.errorMessage }}</p>
+      </main>
       {% else %}
-      {% include 'result.html' %}
+      <main id="results">
+	{% include 'result.html' %}
+      </main>
       {% endif %}
-    </main>
+
     {% else %}
+
     <main id="info">
       <p>The EGA archives a large number of datasets, some of which
 	 are <span class="label label-public">Publicly</span>
