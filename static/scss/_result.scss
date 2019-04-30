@@ -17,21 +17,12 @@ main#results {
 	border-radius:1ex;
 	color:black;
 
+	overflow:hidden;
+
 	h3 { 
 	    margin: 0 0 1em 0;
 	    padding:0 1ex;
 	    text-align:center;
-	    border-radius:inherit;
-	    border-bottom-right-radius:0;
-	    border-bottom-left-radius:0;
-
-	    /* span { */
-	    /* 	display:inline-block; */
-	    /* 	background:#444; */
-	    /* 	color:white; */
-	    /* 	padding:0.3ex 1ex; */
-	    /* 	border-radius:1ex; */
-	    /* } */
 	}
 
 	p { padding:0 1ex; margin:0; }
