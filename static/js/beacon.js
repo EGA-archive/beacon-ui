@@ -61,4 +61,12 @@
     fieldsParam.on('change', reloadParams);
     datasetsParam.on('change', reloadParams);
 
+    $(document).keyup(function(e) {
+	console.log('Key Code', e.keyCode);
+	if (e.keyCode == 27) { // escape
+	    $('#beacon-response-trigger').prop('checked', false);
+	    $('#beacon-request-trigger').prop('checked', false);
+	}
+    });
+
 })();
