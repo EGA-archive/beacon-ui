@@ -74,7 +74,12 @@ MOUNTPOINTS=-v $(shell pwd -P)/logger.yaml/beacon/logger.yaml \
 	    -v $(shell pwd -P)/beaconui:/beacon/beaconui      \
 	    -v $(shell pwd -P)/static:/beacon/static          \
 	    -v $(shell pwd -P)/templates:/beacon/templates    \
-	    -e LOG_YML=/beacon/logger.yaml
+	    -e LOG_YML=/beacon/logger.yaml                    \
+	    -e BEACON_INFO_ENDPOINT="$(BEACON_INFO_ENDPOINT)"                       \
+	    -e BEACON_QUERY_ENDPOINT="$(BEACON_QUERY_ENDPOINT)"                     \
+	    -e BEACON_GENOMIC_REGION_ENDPOINT="$(BEACON_GENOMIC_REGION_ENDPOINT)"   \
+	    -e BEACON_GENOMIC_SNP_ENDPOINT="$(BEACON_GENOMIC_SNP_ENDPOINT)"         \
+	    -e BEACON_ACCESS_LEVELS_ENDPOINT="$(BEACON_ACCESS_LEVELS_ENDPOINT)"
 
 up:
 	docker run -d                                        \
