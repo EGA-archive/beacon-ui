@@ -1,6 +1,8 @@
 
 main {
 
+    flex: 1; /* push footer down */
+
     span.label {
 	display: inline;
 	padding: .2em .6em .3em;

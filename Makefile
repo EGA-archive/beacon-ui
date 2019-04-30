@@ -16,13 +16,13 @@ IMG=egarchive/beacon-frontend
 # export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
 # export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
 
-# # ####### EGA Beacon
-# export BEACON_BASE=https://testbeacon.ega-archive.org
-# export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
-# export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
-# export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
-# export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
-# export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
+# ####### EGA Beacon
+export BEACON_BASE=https://testbeacon.ega-archive.org
+export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
+export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
+export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
+export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
+export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
 
 # ####### OpenCGA @ Sevilla
 # export BEACON_BASE=http://dev.clinbioinfosspa.es:9075/elixirbeacon/v1/beacon
@@ -32,13 +32,13 @@ IMG=egarchive/beacon-frontend
 # export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
 # export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
 
-####### CSVS @ CRG
-export BEACON_BASE=https://egatest.crg.eu/csvs_beacon
-export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
-export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
-export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
-export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
-export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
+# ####### CSVS @ CRG
+# export BEACON_BASE=https://egatest.crg.eu/csvs_beacon
+# export BEACON_INFO_ENDPOINT=$(BEACON_BASE)/?limit=0
+# export BEACON_QUERY_ENDPOINT=$(BEACON_BASE)/query?
+# export BEACON_GENOMIC_REGION_ENDPOINT=$(BEACON_BASE)/genomic_region?
+# export BEACON_GENOMIC_SNP_ENDPOINT=$(BEACON_BASE)/genomic_snp?
+# export BEACON_ACCESS_LEVELS_ENDPOINT=$(BEACON_BASE)/access_levels
 
 # ####### CSVS @ Sevilla
 # export BEACON_BASE=http://dev.clinbioinfosspa.es:9076/elixirbeacon/v1/beacon
