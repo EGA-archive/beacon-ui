@@ -2,11 +2,10 @@ form#query {
 
     display:grid;
     grid-template-columns: 300px 1fr;
-    grid-template-rows: auto 2rem 8rem auto;
-    grid-template-areas: "search search"
-			 "include-responses include-responses"
-                         "datasets filters"
-                         "errors errors";
+    grid-template-rows: auto auto auto;
+    grid-template-areas: "datasets search"
+			 "datasets include-responses"
+                         "datasets errors";
     justify-items: stretch;
     align-items:stretch;
 
@@ -138,6 +137,9 @@ form#query {
 	grid-area: datasets;
 	display:block;
 	position:relative;
+
+	min-height:8rem;
+	max-height:100%;
 
 	> p {
 	    position:absolute; top:-1.3em; right:1em;

@@ -27,17 +27,17 @@ body {
 			   "icon subtitle nav";
       justify-items: stretch;
       align-items:center;
-      grid-column-gap:1rem;
-      
+      grid-column-gap:1rem;      
       
       > a {
 	  grid-area:icon;
 	  justify-self:center;
-      }
-      img {
-	  max-width:150px;
-	  max-height:80px;
-	  display:block;
+
+	  img {
+	      max-width:150px;
+	      max-height:80px;
+	      display:block;
+	  }
       }
       
       > h1 {
@@ -46,6 +46,8 @@ body {
 	  align-self:end;
 	  margin:0;
 	  font-size:1.7em;
+
+	  a { text-decoration:none; color:inherit; }
       }
 
       > h2 {

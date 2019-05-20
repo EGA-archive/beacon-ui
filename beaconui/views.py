@@ -135,28 +135,7 @@ class BeaconQueryView(BeaconView):
         #'filters': ['ICD-10:XVI'],
         'filters': ['PATO:0000383', 'HP:0011007>=49', 'EFO:0009656'],
     }
-    endpoint = 'BEACON_QUERY_ENDPOINT'
-
-
-class BeaconGenomicRegionView(BeaconView):
-    formbase = 'QueryRegionForm'
-    cheat_data = {
-        'query': "1 : 14900 - 15000",
-        'assemblyId': 'grch37',
-        'includeDatasetResponses': 'ALL',
-    }
-    endpoint = 'BEACON_GENOMIC_REGION_ENDPOINT'
-
-class BeaconGenomicSNPView(BeaconView):
-    formbase = 'QueryForm'
-    cheat_data = {
-        'query': "1 : 13272 G > C",
-        'assemblyId': 'GRCh37',
-        'includeDatasetResponses': 'HIT',
-        'filters': ['csvs.tech:1','csvs.tech:3'],
-    }
-    endpoint = 'BEACON_GENOMIC_SNP_ENDPOINT'
-
+    endpoint = 'BEACON_ENDPOINT_query'
 
 
 class BeaconHistoryView(TemplateView):

@@ -24,10 +24,10 @@
     {% if response %}
 
       {% if response.error %}
-      <main id="results-errors">
+      <section id="results-errors">
 	<p>{{ response.error.errorCode }}</p>
 	<p>{{ response.error.errorMessage }}</p>
-      </main>
+      </section>
       {% else %}
       <main id="results">
 	{% include 'result.html' %}
@@ -50,18 +50,7 @@
       {% for dataset in beacon.datasets %}
       <section>
 	<a href="//ega-archive.org/datasets/{{ dataset.id }}">
-
 	  <span class="label label-{{ dataset.info.accessType|lower }}">{{ dataset.id }}</span>
-
-	  {% comment %}
-	  {% for info in dataset.info %}
-	  {% if info.key == 'accessType' %}
-	  <span class="label label-{{ info.value|lower }}">{{ dataset.id }}</span>
-	  {% endif %}
-	  {% empty %}
-	  {{ dataset.id }}
-	  {% endfor %}
-	  {% endcomment %}
 	</a>
 	<p>{{ dataset.description|default:'-' }}</p>
       </section>

@@ -47,74 +47,24 @@
       </fieldset>
 
     <fieldset id="query-datasets">
-	<legend>Datasets</legend>
-	<p><span>All</span> / <span>None</span></p>
-
-	<section>
-	{% for d in beacon.datasets %}
-
-	{% for info in d.info %}
-
-	   {% if info.authorized == 'true' %}
-	   <label>
-	     <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
-	     {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
-	   </label>
-	   {% endif %}
-
-	   {% if info.key == "authorized" %}
-	   {% if info.value == "true" %}
-	   <label>
-	     <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
-	     {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
-	   </label>
-	   {% else %}
-	   <label class="dataset-not-authorized">
-	     <input type="checkbox" disabled name="datasetIds" value="{{ d.id }}" />
-	     {{ d.id }}
-	   </label>
-	   {% endif %}
-	   {% endif %}
-
-	{% empty %}
-	<label>
-	  <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
-	  {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
-	</label>
-	{% endfor %}
-
-
-	{% if d.info.authorized %}
-	<label>
-	  <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
-	  {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
-	</label>
-	{% else %}
-	<label class="dataset-not-authorized">
-	  <input type="checkbox" disabled name="datasetIds" value="{{ d.id }}" />
-	  {{ d.id }}
-	</label>
-	{% endif %}
-
-	   
-	{% endfor %}
-	</section>
-      </fieldset>
-
-      <fieldset id="query-filters">
-	<legend>Filters <i class="filter-add fas fa-plus-circle"></i></legend>
-	{% for f in filters %}
-	<section>
-	  <input type="text" value="{{ f }}" {% if not f %}placeholder="HP:0011007>=49 or PATO:0000383 or EFO:0009656" {% endif %}name="filters" data-lpignore="true" />
-	  <i class="filter-remove fas fa-minus-circle"></i>
-	</section>
-	{% empty %}
-	<section>
-	  <input type="text" value="" placeholder="HP:0011007>=49 or PATO:0000383 or EFO:0009656" name="filters" data-lpignore="true" />
-	  <i class="filter-remove fas fa-minus-circle"></i>
-	</section>
-	{% endfor %}
-      </fieldset>
-
+      <legend>Datasets</legend>
+      <p><span>All</span> / <span>None</span></p>
+      
+      <section>
+      {% for d in beacon.datasets %}
+         {% if d.info.authorized %}
+         <label>
+	   <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
+	   {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}
+	 </label>
+	 {% else %}
+	 <label class="dataset-not-authorized">
+	   <input type="checkbox" disabled name="datasetIds" value="{{ d.id }}" />
+	   {{ d.id }}
+	 </label>
+	 {% endif %}
+      {% endfor %}
+      </section>
+    </fieldset>
 
 </form>
