@@ -16,7 +16,7 @@ regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s+\:\s+(\d+)\s+([ATCGN]+)\s+\
 
 
 class IncludeDatasetResponsesWidget(forms.RadioSelect):
-    template_name='include_dataset_responses.html'
+    template_name='forms/include_dataset_responses.html'
 
         
 class QueryForm(forms.Form):

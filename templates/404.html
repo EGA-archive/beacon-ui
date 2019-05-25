@@ -11,13 +11,15 @@
     <link rel="stylesheet" href="{% static 'css/error.css' %}" />
     </head>
   <body>
-    <a href="{% url 'beacon' %}" id="home">Beacon</a>
     <h1>Ooops! Page not found.<span>404</span></h1>
     <p>
       We could not find the page you are looking for.
     </p>
     <p>
       It might have been removed, or you could double-check the URL you typed.
+    </p>
+    <p>
+      <a href="/">Go back to the frontpage</a>
     </p>
   </body>
   {% include "cookies.html" %}
