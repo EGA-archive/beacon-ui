@@ -9,13 +9,13 @@
   {% if response %}
   <section>
     <input id="beacon-request-trigger" type="checkbox" />
-    <label for="beacon-request-trigger">Beacon URL request</label>
+    <label for="beacon-request-trigger">API request</label>
     <a id="beacon-request" href="{{ query_url }}">{{ query_url|safe }}</a>
   </section>
 
   <section>
     <input id="beacon-response-trigger" type="checkbox" />
-    <label for="beacon-response-trigger">Beacon RAW response</label>
+    <label for="beacon-response-trigger">API response</label>
     <pre id="beacon-response">{{ response|pprint|safe }}</pre>
   </section>
   {% endif %}

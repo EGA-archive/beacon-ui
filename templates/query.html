@@ -1,9 +1,10 @@
 <form id="query"
-      action=""
+      action="{{ request.get_full_path }}"
       method="post"
       accept-charset="UTF-8"
       autocomplete="off"
       enctype="multipart/form-data"
+      data-cache-key="form"
       novalidate="">
 
       {% csrf_token %}
@@ -66,5 +67,20 @@
       {% endfor %}
       </section>
     </fieldset>
+
+      <fieldset id="query-filters">
+	<legend>Filters <i class="filter-add fas fa-plus-circle"></i></legend>
+	{% for f in filters %}
+	<section>
+	  <input type="text" value="{{ f }}" {% if not f %}placeholder="HP:0011007>=49 or PATO:0000383 or EFO:0009656" {% endif %}name="filters" data-lpignore="true" />
+	  <i class="filter-remove fas fa-minus-circle"></i>
+	</section>
+	{% empty %}
+	<section>
+	  <input type="text" value="" placeholder="HP:0011007>=49 or PATO:0000383 or EFO:0009656" name="filters" data-lpignore="true" />
+	  <i class="filter-remove fas fa-minus-circle"></i>
+	</section>
+	{% endfor %}
+      </fieldset>
 
 </form>

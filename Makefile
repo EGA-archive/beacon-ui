@@ -8,10 +8,12 @@ IMG=egarchive/beacon-frontend
 
 .PHONY: server build up down log exec
 
-# ####### Beacon Endpoints
-export BEACON_INFO_ENDPOINT=https://testbeacon.ega-archive.org/?limit=0
-export BEACON_ACCESS_LEVELS_ENDPOINT=https://testbeacon.ega-archive.org/access_levels
-export BEACON_ENDPOINT_query=https://testbeacon.ega-archive.org/query?
+# ####### Beacon API endpoints
+export BEACON_API_INFO=https://testbeacon.ega-archive.org/?limit=0
+export BEACON_API_ACCESS_LEVELS=https://testbeacon.ega-archive.org/access_levels
+export BEACON_API_QUERY=https://testbeacon.ega-archive.org/query?
+export BEACON_API_GENOMIC_SNP=https://testbeacon.ega-archive.org/query_snp?
+export BEACON_API_GENOMIC_REGION=https://testbeacon.ega-archive.org/query_region?
 
 
 server:
@@ -26,7 +28,7 @@ shell:
 	@python manage.py shell -i python
 
 
-MOUNTPOINTS=-v $(shell pwd -P)/logger.yaml/beacon/logger.yaml \
+MOUNTPOINTS=-v $(shell pwd -P)/logger.yaml:/beacon/logger.yaml \
 	    -v $(shell pwd -P)/manage.py:/beacon/manage.py    \
 	    -v $(shell pwd -P)/beaconui:/beacon/beaconui      \
 	    -v $(shell pwd -P)/static:/beacon/static          \

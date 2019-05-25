@@ -6,6 +6,8 @@
 
   <nav>
     <a href="{% url 'query' %}">Query</a>
+    <a href="{% url 'snp' %}">SNP</a>
+    <a href="{% url 'region' %}">Region</a>
     <a href="{% url 'levels' %}">Access Levels</a>
     {% if request.session.user %}
     <span>{{ request.session.user.nickname }}</span>

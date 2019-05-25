@@ -26,26 +26,28 @@ main {
     p { margin:0 0 1em 0; }
 }
 
-main#info {
-    section {
-	display:flex;
-	flex-flow: row no-wrap;
-	align-items: flex-start;
-	padding:0.5em 0;
+#info {
+    main {
+	section {
+	    display:flex;
+	    flex-flow: row no-wrap;
+	    align-items: flex-start;
+	    padding:0.5em 0;
 
-	border-top:1px solid #ccc;
+	    border-top:1px solid #ccc;
 
-	max-width:100%;
+	    max-width:100%;
 
-	> p { margin:0; padding: 0 1em;
-	      /* overflow: hidden; text-overflow: ellipsis; white-space: nowrap; */
-	      flex:1;
+	    > p { margin:0; padding: 0 1em;
+		  /* overflow: hidden; text-overflow: ellipsis; white-space: nowrap; */
+		  flex:1;
+		}
+	    > a {
+		display:inline-block; margin:0; padding:0; text-decoration:none;
+		.label { font-size:1em; }
 	    }
-	> a {
-	    display:inline-block; margin:0; padding:0; text-decoration:none;
-	    .label { font-size:1em; }
-	}
 
+	}
     }
 }
 

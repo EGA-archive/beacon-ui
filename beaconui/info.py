@@ -21,10 +21,10 @@ def make_cache_key(*args):
 
 def _fetch(user, access_token = None):
     
-    query_url = os.getenv('BEACON_INFO_ENDPOINT')
+    query_url = os.getenv('BEACON_API_INFO')
 
     if not query_url:
-        raise Http404('BEACON_INFO_ENDPOINT environment variable is empty')
+        raise Http404('BEACON_API_INFO environment variable is empty')
 
     cache_key = make_cache_key(user,access_token)
     cached_data = cache.get(cache_key)

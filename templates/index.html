@@ -16,7 +16,7 @@
     <link rel="icon" href="//ega-archive.org/favicon.ico">
 
   </head>
-  <body>
+  <body id="{% if response %}response{% else %}info{% endif %}">
 
     {% include 'header.html' %}
     {% include 'query.html' %}
@@ -29,37 +29,50 @@
 	<p>{{ response.error.errorMessage }}</p>
       </section>
       {% else %}
-      <main id="results">
+      <main>
 	{% include 'result.html' %}
       </main>
       {% endif %}
 
+      <section id="response-history">
+	<h2 class="response-{{ beacon_query.exists }}">
+	  [{{ request.POST.assemblyId|stringformat:'s'|escape }}] {{ request.POST.query|stringformat:'s'|escape }}
+	  <i class="fas fa-redo-alt"></i>
+	</h2>
+	<ul>
+	  {% for k,v in beacon_query.params.items %}
+	  <li>{{ k }}: {{ v }}</li>
+	  {% endfor %}
+	</ul>
+      </section>
+
     {% else %}
 
-    <main id="info">
-      <p>The EGA archives a large number of datasets, some of which
-	 are <span class="label label-public">Publicly</span>
-	 available.  If you have an account on this website, you can
-	 access to <span class="label
-	 label-registered">Registered</span> datasets.  To
-	 access <span class="label label-controlled">Controlled</span>
-	 datasets can be done by contacting the relevant Data Access
-	 Committee (DAC), whose details are displayed on the Dataset
-	 description page under "Who controls access to this dataset".
-      </p>
-      {% for dataset in beacon.datasets %}
-      <section>
-	<a href="//ega-archive.org/datasets/{{ dataset.id }}">
-	  <span class="label label-{{ dataset.info.accessType|lower }}">{{ dataset.id }}</span>
-	</a>
-	<p>{{ dataset.description|default:'-' }}</p>
-      </section>
-      {% endfor %}
-    </main>
+      <main>
+	<p>The EGA archives a large number of datasets, some of which
+	   are <span class="label label-public">Publicly</span>
+	   available.  If you have an account on this website, you can
+	   access to <span class="label
+	   label-registered">Registered</span> datasets.  To
+	   access <span class="label
+	   label-controlled">Controlled</span> datasets can be done by
+	   contacting the relevant Data Access Committee (DAC), whose
+	   details are displayed on the Dataset description page under
+	   "Who controls access to this dataset".
+	</p>
+	{% for dataset in beacon.datasets %}
+	<section>
+	  <a href="//ega-archive.org/datasets/{{ dataset.id }}">
+	    <span class="label label-{{ dataset.info.accessType|lower }}">{{ dataset.id }}</span>
+	  </a>
+	  <p>{{ dataset.description|default:'-' }}</p>
+	</section>
+	{% endfor %}
+      </main>
+
     {% endif %}
 
-    {% include 'history.html' %}
-
     {% include 'footer.html' %}
+    <script src="{% static 'js/history.js' %}"></script>
   </body>
 </html>
