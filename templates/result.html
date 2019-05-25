@@ -3,6 +3,7 @@
 
 <section class="datasets-response exists-{{ ds.exists|yesno:'Y,N' }}">
   <h3>{{ ds.datasetId }}</h3>
+  {% if ds.sampleCount or ds.variantCount or ds.datasetHandover%}
   <ul>
     {% if ds.sampleCount %}<li>Sample count: {{ ds.sampleCount }}</li>{% endif %}
     {% if ds.variantCount %}<li>Variant count: {{ ds.variantCount }}</li>{% endif %}
@@ -18,6 +19,7 @@
     {% endif %}
 
   </ul>
+  {% endif %}
 </section>
 
 {% empty %}

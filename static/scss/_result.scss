@@ -20,7 +20,7 @@ body#response > main {
 	overflow:hidden;
 	
 	h3 { 
-	    margin: 0 0 1em 0;
+	    margin:0;
 	    padding:0 1ex;
 	    text-align:center;
 	}
@@ -30,6 +30,8 @@ body#response > main {
 	    padding:0 1ex 0 3ex;
 	    /* list-style-type: none; */
 	}
+
+	> ul { margin-top:1em; }
 	
 	&.exists-Y {
 	    h3 { background-color: #5cb85c; }

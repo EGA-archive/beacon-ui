@@ -3,8 +3,8 @@ PyYAML
 aiohttp
 aiohttp_wsgi
 aiohttp_session
-cryptography
+#cryptography
 aiohttp_jinja2
 jinja2
-urllib3==1.24.2
+#urllib3==1.24.2
 requests

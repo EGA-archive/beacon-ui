@@ -5,18 +5,18 @@ root:
   handlers: [noHandler]
 
 loggers:
-  django:
-    level: ERROR
-    handlers: [console]
-    propagate: False
   beaconui:
-    level: DEBUG
+    level: INFO
     handlers: [console]
     propagate: True
-  urllib3:
-    level: CRITICAL
-    handlers: [console]
-    propagate: False
+  # django:
+  #   level: ERROR
+  #   handlers: [console]
+  #   propagate: False
+  # urllib3:
+  #   level: CRITICAL
+  #   handlers: [console]
+  #   propagate: False
 
 handlers:
   noHandler:
