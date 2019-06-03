@@ -7,7 +7,6 @@ import os
 import requests
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.views.generic import TemplateView
-from django.urls import reverse
 from django.contrib.auth import logout
 from django.conf import settings
 
@@ -20,7 +19,7 @@ class BeaconLoginView(TemplateView):
         access_token = request.session.get('access_token')
         if access_token:
             LOG.debug('Token: %s', access_token)
-            return HttpResponseRedirect(request.GET.get('next', reverse('query')))
+            return HttpResponseRedirect(request.GET.get('next', '/'))
 
         redirect_uri = settings.CONF.get('idp', 'redirect_uri')
         code = request.GET.get('code')
@@ -88,7 +87,7 @@ class BeaconLoginView(TemplateView):
         LOG.info('The user is: %r', user)
         request.session['user'] = user
 
-        return HttpResponseRedirect(reverse('query'))
+        return HttpResponseRedirect(request.GET.get('next', '/'))
 
 class BeaconLogoutView(TemplateView):
 

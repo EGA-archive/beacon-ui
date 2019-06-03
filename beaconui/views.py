@@ -151,7 +151,7 @@ class BeaconAccessLevelsView(TemplateView):
     @info.fetch
     def get(self, request, beacon_info):
 
-        query_url = settings.CONF.get('beacon-api', 'access_levels', default=None)
+        query_url = settings.CONF.get('beacon-api', 'access_levels', fallback=None)
         if not query_url:
             return render(request, 'error.html', {'message':'[beacon-api] access_levels is misconfigured' })
 
@@ -162,12 +162,15 @@ class BeaconAccessLevelsView(TemplateView):
         headers = { 'Accept': 'application/json',
                     'Content-type': 'application/json',
         }
-        params = {}
-        # if access_token: # we have a user
-        #     params['auth'] = 'yes'
-        #     headers['Authorization'] = 'Bearer ' + access_token
 
-        resp = requests.get(query_url, headers=headers, params=params)
+        headers = {}
+        access_token = request.session.get('access_token')
+        if access_token:
+            headers['Authorization'] = 'Bearer ' + access_token
+        else:
+            LOG.debug('No Access token supplied')
+
+        resp = requests.get(query_url, headers=headers)
         if resp.status_code > 200:
             return render(request, 'error.html', {'message':'Backend not available' })
 

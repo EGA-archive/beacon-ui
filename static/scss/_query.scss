@@ -1,7 +1,7 @@
 form#query {
 
     display:grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 400px 1fr;
     /* grid-template-rows: auto auto auto auto; */
     grid-template-rows: auto;
     grid-template-areas: "search search"
@@ -180,10 +180,11 @@ form#query {
 
 	section {
 	    margin-bottom:0.5em;
+	    display:flex;
+	    align-items:center;
 	
 	    input { 
-		width:90%;
-		box-sizing:border-box;
+		flex-grow: 1;
 		padding: .3em 1em;
 		border: 1px solid #DDDDDD;
 		outline: none;
@@ -192,6 +193,10 @@ form#query {
 		&::placeholder { color: #222; }
 		&:focus { box-shadow: 0 0 5px rgba(81, 203, 238, 1); }
 	    }
+	    
+	    i { margin-left:1ex; }
+	    /* input + i { margin-left:1ex; } */
+
 	}
     }
 
