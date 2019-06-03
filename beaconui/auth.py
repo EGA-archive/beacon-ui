@@ -2,22 +2,16 @@ import logging
 import uuid
 import base64
 from urllib.parse import urlencode
+import os
 
 import requests
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.urls import reverse
 from django.contrib.auth import logout
+from django.conf import settings
 
 LOG = logging.getLogger(__name__)
-
-IDP_URL = 'https://egatest.crg.eu/idp/'
-CLIENT_ID='beaconUI'
-CLIENT_SECRET='NWjr_uGUafUt7KVyn-kZDvSIN9EzRC0bW9OzBur7KYuhpMzuImDRDwdfsTqj6ldjGb3ZlZ2n4RXJJNim-KepWA'
-SCOPE='profile email openid'
-AUTHORIZE_URL = IDP_URL + 'authorize?'
-ACCESS_TOKEN_URL = IDP_URL + 'token'
-USER_INFO_URL = IDP_URL + 'userinfo'
 
 class BeaconLoginView(TemplateView):
 
@@ -28,16 +22,16 @@ class BeaconLoginView(TemplateView):
             LOG.debug('Token: %s', access_token)
             return HttpResponseRedirect(request.GET.get('next', reverse('query')))
 
+        redirect_uri = settings.CONF.get('idp', 'redirect_uri')
         code = request.GET.get('code')
         if code is None:
             LOG.debug('We must have a code')
-            redirect_uri = 'http://localhost:8000' + reverse('login')
             params = urlencode({ 'response_type': 'code',
-                                 'client_id': CLIENT_ID,
-                                 'scope': 'openid profile email',
+                                 'client_id': settings.CONF.get('idp', 'client_id'),
+                                 'scope': settings.CONF.get('idp', 'scope'),
                                  'state': uuid.uuid4(),
                                  'redirect_uri': redirect_uri })
-            url = AUTHORIZE_URL + params
+            url = settings.CONF.get('idp', 'authorize') + params
             LOG.debug('No code: Redirecting to URL: %s', url)
             return HttpResponseRedirect(url)
 
@@ -51,22 +45,22 @@ class BeaconLoginView(TemplateView):
                     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         }
 
-        redirect_uri = request.GET.get('next', '/')
-
         # We have a code and a state
         LOG.debug('Code: %s', code)
 
-        basic = base64.b64encode('{}:{}'.format(CLIENT_ID, CLIENT_SECRET).encode())
+        basic = base64.b64encode('{}:{}'.format(settings.CONF.get('idp', 'client_id'),
+                                                settings.CONF.get('idp', 'client_secret'))
+                                 .encode())
         headers['Authorization'] = b'Basic '+basic
 
         params = { 'grant_type': 'authorization_code',
-                   #'client_id': CLIENT_ID,
-                   #'client_secret': CLIENT_SECRET,
                    'code': code,
-                   'redirect_uri': 'http://localhost:8000/login' #'http://localhost:8000' + redirect_uri
+                   'redirect_uri': redirect_uri
         }
         LOG.debug( 'Post Request %r', params)
-        res = requests.post(ACCESS_TOKEN_URL, headers=headers, data=urlencode(params))
+        res = requests.post(settings.CONF.get('idp', 'access_token'),
+                            headers=headers,
+                            data=urlencode(params))
         if res.status_code > 200:
             LOG.error( 'Error when getting the access token: %r', res)
             return HttpResponseBadRequest('Invalid response for access token.')
@@ -84,7 +78,9 @@ class BeaconLoginView(TemplateView):
             request.session['id_token'] = id_token
 
         # Fetch more info about the user
-        res = requests.post(USER_INFO_URL, headers=headers, data=urlencode({'access_token': access_token}))
+        res = requests.post(settings.CONF.get('idp', 'user_info'),
+                            headers=headers, 
+                            data=urlencode({'access_token': access_token}))
         user = None
         if res.status_code == 200:
             user = res.json()

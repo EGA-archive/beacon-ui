@@ -3,9 +3,10 @@ import logging
 from hashlib import sha256
 import os
 
-from django.http import Http404
-from django.core.cache import cache
 import requests
+from django.http import Http404, HttpResponse
+from django.core.cache import cache
+from django.conf import settings
 
 LOG = logging.getLogger(__name__)
 
@@ -21,10 +22,10 @@ def make_cache_key(*args):
 
 def _fetch(user, access_token = None):
     
-    query_url = os.getenv('BEACON_API_INFO')
+    query_url = settings.CONF.get('beacon-api', 'info_url')
 
     if not query_url:
-        raise Http404('BEACON_API_INFO environment variable is empty')
+        raise Http404('[beacon-api] info misconfigured')
 
     cache_key = make_cache_key(user,access_token)
     cached_data = cache.get(cache_key)
@@ -35,16 +36,20 @@ def _fetch(user, access_token = None):
         LOG.info('Contacting Beacon backend: %s', query_url)
         headers = { 'Accept': 'application/json',
                     'Content-type': 'application/json',
-                    #'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
         }
         params = {}
         if access_token: # we have a user
-            params['auth'] = 'yes'
+            LOG.info('With a token: %s', access_token)
             headers['Authorization'] = 'Bearer ' + access_token
 
         resp = requests.get(query_url, headers=headers, params=params)
         if resp.status_code > 200:
-            raise Http404('Backend not available')
+
+            beacon_info = resp.json()
+            message = beacon_info.get('header',{}).get('userMessage')
+            raise Exception(f'Error {resp.status_code}: {message}')
+
+            #raise Http404('Backend not available')
 
         beacon_info = resp.json()
 
@@ -65,13 +70,6 @@ def fetch(func):
 
 
 #########################################################################
-# Beacon Endpoints
-#########################################################################
-
-# Beacon endpoint are now in environment variables
-# Check the Makefile for BEACON_INFO_ENDPOINT and BEACON_QUERY_ENDPOINT
-
-#########################################################################
 # Fetch info, datasets and assemblyIds
 #########################################################################
 try:
@@ -83,3 +81,4 @@ except Exception as e:
 # This beacon datasets is for the non logged-in users
 BEACON_DATASETS = BEACON_INFO.get('datasets',[])
 BEACON_ASSEMBLYIDS = set( (d['assemblyId'] for d in BEACON_DATASETS) )
+

@@ -113,3 +113,27 @@ STATICFILES_DIRS = [ # additional
     os.path.join(BASE_DIR, 'static'), # so we don't need collectstatic
 ]
 
+
+########################################################################
+## Beacon settings
+########################################################################
+import sys
+import os
+import configparser
+from logging.config import fileConfig, dictConfig
+import yaml
+
+# Conf in INI format
+BEACON_UI_CONF = os.getenv('BEACON_UI_CONF')
+if not BEACON_UI_CONF:
+    print('BEACON_UI_CONF environment variable is empty', file=sys.stderr)
+    sys.exit(1)
+
+CONF = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
+if not BEACON_UI_CONF.startswith('/'): # relative path
+    BEACON_UI_CONF = os.path.join(BASE_DIR, BEACON_UI_CONF)
+CONF.read(BEACON_UI_CONF)
+
+# Log inside CONF in INI format
+fileConfig(BEACON_UI_CONF)
+

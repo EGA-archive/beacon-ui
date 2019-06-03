@@ -53,7 +53,7 @@
       
       <section>
       {% for d in beacon.datasets %}
-         {% if d.info.authorized %}
+         {% if d.info.authorized == 'true' %}
          <label>
 	   <input type="checkbox" name="datasetIds" value="{{ d.id }}" {% if d.id in selected_datasets %}checked{% endif %}/>
 	   {{ d.id }}{% if d.variantCount %} ({{ d.variantCount }} variant{{ d.variantCount|pluralize }}){% endif %}

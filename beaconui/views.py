@@ -76,9 +76,9 @@ class BaseView(TemplateView):
             params_d['filters'] = ','.join(filters)
 
         # Don't check anything and forward to backend        
-        query_url = os.getenv(self.api_endpoint)
+        query_url = self.api_endpoint
         if not query_url:
-            return render(request, 'error.html', { 'message': '{} environment variable missing'.format(self.api_endpoint) })
+            return render(request, 'error.html', { 'message': self.api_endpoint_error })
  
         query_url += urlencode(params_d, safe=',')
         LOG.debug('Forwarding to %s',query_url)
@@ -114,7 +114,8 @@ class BaseView(TemplateView):
 
 class BeaconQueryView(BaseView):
     formbase = 'QueryForm'
-    api_endpoint = 'BEACON_API_QUERY'
+    api_endpoint = settings.CONF.get('beacon-api', 'query')
+    api_endpoint_error = '[beacon-api] query endpoint misconfigured'
     # cheat_data = {
     #     'query': "1 : 13272 G > C",
     #     'assemblyId': 'grch37',
@@ -125,7 +126,8 @@ class BeaconQueryView(BaseView):
 
 class BeaconSNPView(BaseView):
     formbase = 'QueryForm'
-    api_endpoint = 'BEACON_API_GENOMIC_SNP'
+    api_endpoint = settings.CONF.get('beacon-api', 'genomic_snp')
+    api_endpoint_error = '[beacon-api] genomic_snp endpoint misconfigured'
     # cheat_data = {
     #     'query': "1 : 13272 G > C",
     #     'assemblyId': 'GRCh37',
@@ -135,7 +137,8 @@ class BeaconSNPView(BaseView):
 
 class BeaconRegionView(BaseView):
     formbase = 'QueryRegionForm'
-    api_endpoint = 'BEACON_API_GENOMIC_REGION'
+    api_endpoint = settings.CONF.get('beacon-api', 'genomic_region')
+    api_endpoint_error = '[beacon-api] genomic_region endpoint misconfigured'
     # cheat_data = {
     #     'query': "1 : 14900 - 15000",
     #     'assemblyId': 'grch37',
@@ -148,9 +151,9 @@ class BeaconAccessLevelsView(TemplateView):
     @info.fetch
     def get(self, request, beacon_info):
 
-        query_url = os.getenv('BEACON_API_ACCESS_LEVELS')
+        query_url = settings.CONF.get('beacon-api', 'access_levels', default=None)
         if not query_url:
-            return render(request, 'error.html', {'message':'BEACON_ACCESS_LEVELS_ENDPOINT environment variable missing' })
+            return render(request, 'error.html', {'message':'[beacon-api] access_levels is misconfigured' })
 
         if request.GET:
             query_url += '?' + request.GET.urlencode()
