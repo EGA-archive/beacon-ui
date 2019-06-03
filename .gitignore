@@ -9,6 +9,7 @@ __pycache__/
 grunt
 Makefile
 manage.py
+.tramp_history
 
 *.errors
 data
