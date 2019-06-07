@@ -18,7 +18,12 @@ SECRET_KEY = '45@$0dth)d(pi*s6ejaay8xd@s0scjqgl_nj0ezyuon*2xxz@p'
 #DEBUG = False
 DEBUG = True
 
-ALLOWED_HOSTS = ['tf.crg.eu','ega-archive.org','130.239.81.195','localhost']
+ALLOWED_HOSTS = ['tf.crg.eu',
+                 'ega-archive.org',
+                 'xfer13.local',
+                 '130.239.81.195',
+                 '84.88.52.84',
+                 'localhost']
 
 ROOT_URLCONF = 'beaconui.urls'
 
@@ -133,20 +138,23 @@ STATICFILES_DIRS = [ # additional
 import sys
 import os
 import configparser
-from logging.config import fileConfig, dictConfig
+from logging.config import dictConfig
 import yaml
 
 # Conf in INI format
-BEACON_UI_CONF = os.getenv('BEACON_UI_CONF')
-if not BEACON_UI_CONF:
+conf_file = os.getenv('BEACON_UI_CONF')
+if not conf_file:
     print('BEACON_UI_CONF environment variable is empty', file=sys.stderr)
     sys.exit(1)
 
 CONF = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
-if not BEACON_UI_CONF.startswith('/'): # relative path
-    BEACON_UI_CONF = os.path.join(BASE_DIR, BEACON_UI_CONF)
-CONF.read(BEACON_UI_CONF)
+if not conf_file.startswith('/'): # relative path
+    conf_file = os.path.join(BASE_DIR, conf_file)
+CONF.read(conf_file)
 
-# Log inside CONF in INI format
-fileConfig(BEACON_UI_CONF)
+# Logger in YML format
+log_file = os.getenv('BEACON_UI_LOG')
+if log_file and os.path.exists(log_file):
+    with open(log_file, 'r') as stream:
+        dictConfig(yaml.safe_load(stream))
 
