@@ -6,7 +6,8 @@
 	cookieButton = cookiePane.querySelector('button');
     if(cookiePane && cookieButton)
 	cookieButton.addEventListener('click', function(){
-	    document.cookie = "beacon=consent;path=/";
+	    var expires = new Date(new Date().setFullYear(new Date().getFullYear() + 1)); // JS is so shitty
+	    document.cookie = "beacon=consent;path=/;expires="+expires.toGMTString();
 	    cookiePane.setAttribute("class", 'hide-me'); // set to 1s
 	    setTimeout(function(){ cookiePane.remove(); }, 1100);
 	    return false;

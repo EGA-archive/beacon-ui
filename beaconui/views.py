@@ -34,6 +34,10 @@ class BaseView(TemplateView):
     @info.fetch
     def get(self, request, beacon_info):
 
+        print('-'*50)
+        print('BASE VIEW get: Access token',request.session.get('access_token'))
+        print('-'*50)
+
         form = getattr(forms, self.formbase)()
 
         ctx = { 'form': form,
@@ -46,6 +50,10 @@ class BaseView(TemplateView):
 
     @info.fetch
     def post(self, request, beacon_info):
+
+        print('-'*50)
+        print('BASE VIEW post: Access token',request.session.get('access_token'))
+        print('-'*50)
  
         form = getattr(forms, self.formbase)(request.POST)
 
@@ -150,6 +158,11 @@ class BeaconAccessLevelsView(TemplateView):
 
     @info.fetch
     def get(self, request, beacon_info):
+
+        print('-'*50)
+        print('ACCESS LEVELS: Access token',request.session.get('access_token'))
+        print('-'*50)
+
 
         query_url = settings.CONF.get('beacon-api', 'access_levels', fallback=None)
         if not query_url:

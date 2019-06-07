@@ -8,3 +8,4 @@ aiohttp_jinja2
 jinja2
 #urllib3==1.24.2
 requests
+django-encrypted-cookie-session

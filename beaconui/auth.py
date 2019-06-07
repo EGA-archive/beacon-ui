@@ -16,12 +16,18 @@ class BeaconLoginView(TemplateView):
 
     def get(self, request):
 
+        next_url = request.GET.get('next', '/')
+        LOG.debug('next URL: %s', next_url)
+
         access_token = request.session.get('access_token')
         if access_token:
             LOG.debug('Token: %s', access_token)
-            return HttpResponseRedirect(request.GET.get('next', '/'))
+            return HttpResponseRedirect(next_url)
 
         redirect_uri = settings.CONF.get('idp', 'redirect_uri')
+        # redirect_uri += '?next=' if '?' not in redirect_uri else '&next='
+        # redirect_uri += next_url
+            
         code = request.GET.get('code')
         if code is None:
             LOG.debug('We must have a code')
@@ -87,17 +93,24 @@ class BeaconLoginView(TemplateView):
         LOG.info('The user is: %r', user)
         request.session['user'] = user
 
-        return HttpResponseRedirect(request.GET.get('next', '/'))
+        return HttpResponseRedirect(next_url)
 
 class BeaconLogoutView(TemplateView):
 
     def get(self, request):
         LOG.info('Logging out: %s', request.session.get('user'))
+
         request.session['user']=None
         request.session['access_token']=None
         request.session['id_token']=None
+
         # None or del ?
-        logout(request)
+        logout(request) # kills the session cookie
+
+        # Note: Not logging out from the IdP
+
+        next_url = request.GET.get('next', '/')
+        LOG.debug('next URL: %s', next_url)
         
-        return HttpResponseRedirect(request.GET.get('next', '/'))
+        return HttpResponseRedirect(next_url)
         

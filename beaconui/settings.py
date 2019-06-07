@@ -20,6 +20,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['tf.crg.eu','ega-archive.org','130.239.81.195','localhost']
 
+ROOT_URLCONF = 'beaconui.urls'
+
 ADMINS = (
     ('Sabela', 'sabela.delatorre@crg.eu'),
     ('Fred', 'frederic.haziza@crg.eu'),
@@ -33,7 +35,7 @@ LOGIN_URL = '/login/'
 
 INSTALLED_APPS = [
     'beaconui',
-    'django.contrib.sessions',
+    #'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django.forms',
 ]
@@ -49,30 +51,41 @@ CACHES = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    #'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 3600 # seconds
 CACHE_MIDDLEWARE_KEY_PREFIX = '' # don't care
 
-ROOT_URLCONF = 'beaconui.urls'
 
-DATABASES = {
-    'default': {
-        # SQLite
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite'),
-        'OPTIONS': { 'timeout': 300, }
-    }
-}
+# DATABASES = {
+#     'default': {
+#         # SQLite
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite'),
+#         'OPTIONS': { 'timeout': 300, }
+#     }
+# }
 
 #SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+#SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+#SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_ENGINE = 'encrypted_cookies' # signed and encrypted
+SESSION_COOKIE_HTTPONLY = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_NAME = 'beacon-session'
+
+
+ENCRYPTED_COOKIE_KEYS = ['gYeI6rjUhpLOSMDHxFFh9dONUA9auiKiLTrzZQz4nfg=']
+SESSION_COOKIE_SECURE = False
+ENCRYPTED_COOKIE_SERIALIZER = 'json'
+COMPRESS_ENCRYPTED_COOKIE = True
+#ENCRYPTED_COOKIE_COMPRESSION_LEVEL = 6
 
 import django 
 

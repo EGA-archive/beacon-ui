@@ -18,7 +18,8 @@
     // var form = document.querySelector('form#query');
     // var main = document.querySelector('body#response main');
     // var footer = document.querySelector('body#response footer');
-    var form   = document.querySelector('body > form'),
+    var body   = document.querySelector('body'),
+	form   = document.querySelector('body > form'),
 	main   = document.querySelector('body > main'),
 	footer = document.querySelector('body > footer');
 
@@ -63,11 +64,15 @@
 	// Reloading an item
 	container.delegate("section h2 i", "click", function() {
 	    var pos = $( this ).parents('section').attr('data-pos');
-	    // console.log("position", pos);
+	    //console.log("position", pos);
 	    var [form_html, main_html, thumb_html, footer_html] = history_items[pos];
+	    body.setAttribute('id','response');
 	    form.outerHTML = form_html;
 	    main.outerHTML = main_html;
 	    footer.outerHTML = footer_html;
+	    //console.log("Repainting");
+	    //console.log(history_items);
+	    return false;
 	});
 
     }

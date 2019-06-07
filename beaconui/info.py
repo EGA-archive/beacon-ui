@@ -27,7 +27,7 @@ def _fetch(user, access_token = None):
     if not query_url:
         raise Http404('[beacon-api] info misconfigured')
 
-    cache_key = make_cache_key(user,access_token)
+    cache_key = make_cache_key(user) # only using the user details, not the token
     cached_data = cache.get(cache_key)
     if cached_data:
         LOG.info('Rendering using cache | key: %s', cache_key)
@@ -37,12 +37,11 @@ def _fetch(user, access_token = None):
         headers = { 'Accept': 'application/json',
                     'Content-type': 'application/json',
         }
-        params = {}
         if access_token: # we have a user
             LOG.info('With a token: %s', access_token)
             headers['Authorization'] = 'Bearer ' + access_token
 
-        resp = requests.get(query_url, headers=headers, params=params)
+        resp = requests.get(query_url, headers=headers)
         if resp.status_code > 200:
 
             beacon_info = resp.json()
