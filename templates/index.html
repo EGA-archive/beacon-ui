@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1.0, width=device-width, shrink-to-fit=no"/>
-    <title>{{ beacon.name|default:'Beacon' }}</title>
+    <title>{{ BEACON.name|default:'Beacon' }}</title>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
 	  integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
@@ -16,17 +16,17 @@
     <link rel="icon" href="//ega-archive.org/favicon.ico">
 
   </head>
-  <body id="{% if response %}response{% else %}info{% endif %}">
+  <body id="{% if beacon_response %}response{% else %}info{% endif %}">
 
     {% include 'header.html' %}
     {% include 'query.html' %}
 
-    {% if response %}
+    {% if beacon_response %}
 
-      {% if response.error %}
+      {% if beacon_response.error %}
       <section id="results-errors">
-	<p>{{ response.error.errorCode }}</p>
-	<p>{{ response.error.errorMessage }}</p>
+	<p>{{ beacon_response.error.errorCode }}</p>
+	<p>{{ beacon_response.error.errorMessage }}</p>
       </section>
       {% else %}
       <main>
@@ -60,7 +60,7 @@
 	   details are displayed on the Dataset description page under
 	   "Who controls access to this dataset".
 	</p>
-	{% for dataset in beacon.datasets %}
+	{% for dataset in BEACON.datasets %}
 	<section>
 	  <a href="//ega-archive.org/datasets/{{ dataset.id }}">
 	    <span class="label label-{{ dataset.info.accessType|lower }}">{{ dataset.id }}</span>

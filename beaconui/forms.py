@@ -6,8 +6,10 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.conf import settings
 
-from .info import BEACON_ASSEMBLYIDS  # same for everyone
+from . import conf
+
 LOG = logging.getLogger(__name__)
 
 
@@ -22,7 +24,7 @@ class IncludeDatasetResponsesWidget(forms.RadioSelect):
 class QueryForm(forms.Form):
 
     assemblyId = forms.ChoiceField(required=True,
-                                   choices=( (i,i) for i in BEACON_ASSEMBLYIDS ),
+                                   choices=( (i,i) for i in conf.BEACON_ASSEMBLYIDS ),
                                    error_messages = { 'invalid_choice': ('<p>Select a valid choice.</p>'
                                                                          '<p>%(value)s is not one of the available choices.</p>'),
                                                       'required': '<p>is required</p>' },
@@ -92,7 +94,7 @@ region_regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s+\:\s+(\d+)\s+-\s+(\d
 class QueryRegionForm(forms.Form):
 
     assemblyId = forms.ChoiceField(required=True,
-                                   choices=( (i,i) for i in BEACON_ASSEMBLYIDS ),
+                                   choices=( (i,i) for i in conf.BEACON_ASSEMBLYIDS ),
                                    error_messages = { 'invalid_choice': ('<p>Select a valid choice.</p>'
                                                                          '<p>%(value)s is not one of the available choices.</p>'),
                                                       'required': '<p>is required</p>' },

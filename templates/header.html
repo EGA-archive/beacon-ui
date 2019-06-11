@@ -1,15 +1,13 @@
 <header>
-  <a href="{{ beacon.organization.welcomeUrl }}"><img src="{{ beacon.organization.logoUrl }}" alt="{{ beacon.organization.name }}" /></a>
+  <a href="{{ BEACON.organization.welcomeUrl }}"><img src="{{ BEACON.organization.logoUrl }}" alt="{{ BEACON.organization.name }}" /></a>
   
-  <h1><a href="{% url 'query' %}">{{ beacon.name|default:'Beacon' }}</a></h1>
-  <h2>{{ beacon.description|safe }}</h2>
+  <h1><a href="{% url 'query' %}">{{ BEACON.name|default:'Beacon' }}</a></h1>
+  <h2>{{ BEACON.description|safe }}</h2>
 
   <nav>
     <a href="{% url 'query' %}">Query</a>
-    {% comment %}
     <a href="{% url 'snp' %}">SNP</a>
     <a href="{% url 'region' %}">Region</a>
-    {% endcomment %}
     <a href="{% url 'levels' %}">Access Levels</a>
     {% if request.session.user %}
     <span>{{ request.session.user.nickname }}</span>

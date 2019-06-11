@@ -64,14 +64,14 @@
 	// Reloading an item
 	container.delegate("section h2 i", "click", function() {
 	    var pos = $( this ).parents('section').attr('data-pos');
-	    //console.log("position", pos);
+	    console.log("position", pos);
 	    var [form_html, main_html, thumb_html, footer_html] = history_items[pos];
 	    body.setAttribute('id','response');
 	    form.outerHTML = form_html;
 	    main.outerHTML = main_html;
 	    footer.outerHTML = footer_html;
 	    //console.log("Repainting");
-	    //console.log(history_items);
+	    console.log(history_items[pos]);
 	    return false;
 	});
 

@@ -1,5 +1,5 @@
 
-{% for ds in response.datasetAlleleResponses %}
+{% for ds in beacon_response.datasetAlleleResponses %}
 
 <section class="datasets-response exists-{{ ds.exists|yesno:'Y,N' }}">
   <h3>{{ ds.datasetId }}</h3>
@@ -24,12 +24,12 @@
 
 {% empty %}
 
-<section class="beacon-response exists-{{ response.exists|yesno:'Y,N' }}">
-  <h3>Exists: <span>{{ response.exists }}</span></h3>
-  {% if response.beaconHandover %}
+<section class="beacon-response exists-{{ beacon_response.exists|yesno:'Y,N' }}">
+  <h3>Exists: <span>{{ beacon_response.exists }}</span></h3>
+  {% if beacon_response.beaconHandover %}
   <p>Handovers:</p>
   <ul>
-    {% for handover in response.beaconHandover %}
+    {% for handover in beacon_response.beaconHandover %}
     <li>
       <a href="{{ handover.url|safe }}"{% if handover.note %} title="{{ handover.note|safe }}"{% endif %}>
 	{{ handover.handoverType.label }}

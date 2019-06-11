@@ -1,0 +1,19 @@
+ul#messages {
+
+    position:fixed; bottom:1em; right: 1em;
+    z-index: 1000;
+    width: 300px;
+    list-style-type: none;
+
+    display:flex;
+    flex-direction: column-reverse;
+
+    li {
+	text-align:center;
+	background: yellow; color: black;
+	border-radius:1ex;
+	margin: 1ex 0;
+	padding: 1ex;
+    }
+
+}

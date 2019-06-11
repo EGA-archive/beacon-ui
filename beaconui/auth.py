@@ -8,7 +8,9 @@ import requests
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.contrib.auth import logout
-from django.conf import settings
+
+
+from .conf import CONF
 
 LOG = logging.getLogger(__name__)
 
@@ -24,7 +26,7 @@ class BeaconLoginView(TemplateView):
             LOG.debug('Token: %s', access_token)
             return HttpResponseRedirect(next_url)
 
-        redirect_uri = settings.CONF.get('idp', 'redirect_uri')
+        redirect_uri = CONF.get('idp', 'redirect_uri')
         # redirect_uri += '?next=' if '?' not in redirect_uri else '&next='
         # redirect_uri += next_url
             
@@ -32,11 +34,11 @@ class BeaconLoginView(TemplateView):
         if code is None:
             LOG.debug('We must have a code')
             params = urlencode({ 'response_type': 'code',
-                                 'client_id': settings.CONF.get('idp', 'client_id'),
-                                 'scope': settings.CONF.get('idp', 'scope'),
+                                 'client_id': CONF.get('idp', 'client_id'),
+                                 'scope': CONF.get('idp', 'scope'),
                                  'state': uuid.uuid4(),
                                  'redirect_uri': redirect_uri })
-            url = settings.CONF.get('idp', 'authorize') + params
+            url = CONF.get('idp', 'authorize') + params
             LOG.debug('No code: Redirecting to URL: %s', url)
             return HttpResponseRedirect(url)
 
@@ -53,8 +55,8 @@ class BeaconLoginView(TemplateView):
         # We have a code and a state
         LOG.debug('Code: %s', code)
 
-        basic = base64.b64encode('{}:{}'.format(settings.CONF.get('idp', 'client_id'),
-                                                settings.CONF.get('idp', 'client_secret'))
+        basic = base64.b64encode('{}:{}'.format(CONF.get('idp', 'client_id'),
+                                                CONF.get('idp', 'client_secret'))
                                  .encode())
         headers['Authorization'] = b'Basic '+basic
 
@@ -63,7 +65,7 @@ class BeaconLoginView(TemplateView):
                    'redirect_uri': redirect_uri
         }
         LOG.debug( 'Post Request %r', params)
-        res = requests.post(settings.CONF.get('idp', 'access_token'),
+        res = requests.post(CONF.get('idp', 'access_token'),
                             headers=headers,
                             data=urlencode(params))
         if res.status_code > 200:
@@ -83,7 +85,7 @@ class BeaconLoginView(TemplateView):
             request.session['id_token'] = id_token
 
         # Fetch more info about the user
-        res = requests.post(settings.CONF.get('idp', 'user_info'),
+        res = requests.post(CONF.get('idp', 'user_info'),
                             headers=headers, 
                             data=urlencode({'access_token': access_token}))
         user = None
@@ -98,19 +100,21 @@ class BeaconLoginView(TemplateView):
 class BeaconLogoutView(TemplateView):
 
     def get(self, request):
-        LOG.info('Logging out: %s', request.session.get('user'))
-
-        request.session['user']=None
-        request.session['access_token']=None
-        request.session['id_token']=None
-
-        # None or del ?
-        logout(request) # kills the session cookie
-
-        # Note: Not logging out from the IdP
-
+        do_logout(request)
         next_url = request.GET.get('next', '/')
         LOG.debug('next URL: %s', next_url)
-        
         return HttpResponseRedirect(next_url)
         
+
+
+def do_logout(request):
+    LOG.info('Logging out: %s', request.session.get('user'))
+
+    request.session['user']=None
+    request.session['access_token']=None
+    request.session['id_token']=None
+
+    # None or del ?
+    logout(request) # kills the session cookie
+
+    # Note: Not logging out from the IdP

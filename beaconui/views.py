@@ -12,9 +12,8 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.contrib.auth import logout
 
-from . import info  # will prefetch the beacon info
+from .conf import CONF
 from . import forms
-
 
 LOG = logging.getLogger(__name__)
 
@@ -30,31 +29,19 @@ def clean_empty_strings(iterable):
 
 class BaseView(TemplateView):
 
-    # If the user is not logged-in, the beacon_info is already cached
-    @info.fetch
-    def get(self, request, beacon_info):
-
-        print('-'*50)
-        print('BASE VIEW get: Access token',request.session.get('access_token'))
-        print('-'*50)
+    def get(self, request):
 
         form = getattr(forms, self.formbase)()
 
         ctx = { 'form': form,
-                'beacon': beacon_info,
-                'assemblyIds': info.BEACON_ASSEMBLYIDS, # same for everyone
                 'selected_datasets': set(),
                 'filters': set(),
+                'beacon_response': None,
         }
         return render(request, 'index.html', ctx)
 
-    @info.fetch
-    def post(self, request, beacon_info):
+    def post(self, request):
 
-        print('-'*50)
-        print('BASE VIEW post: Access token',request.session.get('access_token'))
-        print('-'*50)
- 
         form = getattr(forms, self.formbase)(request.POST)
 
         selected_datasets = set(request.POST.getlist("datasetIds", []))
@@ -63,8 +50,6 @@ class BaseView(TemplateView):
         LOG.debug('filters: %s', filters )
 
         ctx = { 'form': form,
-                'beacon': beacon_info,
-                'assemblyIds': info.BEACON_ASSEMBLYIDS, # same for everyone
                 'selected_datasets': selected_datasets,
                 'filters': filters,
         }
@@ -110,7 +95,7 @@ class BaseView(TemplateView):
 
         #LOG.debug('Response: %s', response)
 
-        ctx['response'] = response
+        ctx['beacon_response'] = response
         ctx['query_url'] = query_url
         ctx['beacon_query'] = { 'params': params_d, 
                                 'exists': 'Y' if response.get('exists', False) else 'N'
@@ -122,7 +107,7 @@ class BaseView(TemplateView):
 
 class BeaconQueryView(BaseView):
     formbase = 'QueryForm'
-    api_endpoint = settings.CONF.get('beacon-api', 'query')
+    api_endpoint = CONF.get('beacon-api', 'query')
     api_endpoint_error = '[beacon-api] query endpoint misconfigured'
     # cheat_data = {
     #     'query': "1 : 13272 G > C",
@@ -134,7 +119,7 @@ class BeaconQueryView(BaseView):
 
 class BeaconSNPView(BaseView):
     formbase = 'QueryForm'
-    api_endpoint = settings.CONF.get('beacon-api', 'genomic_snp')
+    api_endpoint = CONF.get('beacon-api', 'genomic_snp')
     api_endpoint_error = '[beacon-api] genomic_snp endpoint misconfigured'
     # cheat_data = {
     #     'query': "1 : 13272 G > C",
@@ -145,7 +130,7 @@ class BeaconSNPView(BaseView):
 
 class BeaconRegionView(BaseView):
     formbase = 'QueryRegionForm'
-    api_endpoint = settings.CONF.get('beacon-api', 'genomic_region')
+    api_endpoint = CONF.get('beacon-api', 'genomic_region')
     api_endpoint_error = '[beacon-api] genomic_region endpoint misconfigured'
     # cheat_data = {
     #     'query': "1 : 14900 - 15000",
@@ -156,15 +141,9 @@ class BeaconRegionView(BaseView):
 
 class BeaconAccessLevelsView(TemplateView):
 
-    @info.fetch
-    def get(self, request, beacon_info):
+    def get(self, request):
 
-        print('-'*50)
-        print('ACCESS LEVELS: Access token',request.session.get('access_token'))
-        print('-'*50)
-
-
-        query_url = settings.CONF.get('beacon-api', 'access_levels', fallback=None)
+        query_url = CONF.get('beacon-api', 'access_levels', fallback=None)
         if not query_url:
             return render(request, 'error.html', {'message':'[beacon-api] access_levels is misconfigured' })
 
@@ -176,7 +155,6 @@ class BeaconAccessLevelsView(TemplateView):
                     'Content-type': 'application/json',
         }
 
-        headers = {}
         access_token = request.session.get('access_token')
         if access_token:
             headers['Authorization'] = 'Bearer ' + access_token
@@ -188,8 +166,6 @@ class BeaconAccessLevelsView(TemplateView):
             return render(request, 'error.html', {'message':'Backend not available' })
 
         ctx = resp.json()
-
-        ctx['beacon'] = beacon_info
 
         ctx['fieldsParam'] = True if request.GET.get('includeFieldDetails', 'false') == 'true' else False
         ctx['datasetsParam'] = True if request.GET.get('displayDatasetDifferences', 'false') == 'true' else False

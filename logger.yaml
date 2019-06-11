@@ -6,17 +6,21 @@ root:
 
 loggers:
   beaconui:
-    level: INFO
+    level: DEBUG
     handlers: [console]
     propagate: True
   encrypted_cookies:
     level: INFO
     handlers: [console]
     propagate: True
-  # django:
-  #   level: ERROR
-  #   handlers: [console]
-  #   propagate: False
+  django:
+    level: INFO
+    handlers: [console]
+    propagate: False
+  django.contrib.session:
+    level: DEBUG
+    handlers: [console]
+    propagate: False
   # urllib3:
   #   level: CRITICAL
   #   handlers: [console]
