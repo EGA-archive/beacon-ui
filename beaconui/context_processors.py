@@ -84,13 +84,12 @@ def info(request):
         LOG.info('User id: %s', user_id )
         access_token = request.session.get('access_token')
         da_info = get_info(user_id, access_token = None)
-        #messages.info(request, f'Info for {user_id}')
     except AuthError as ae:
         LOG.debug('Retrying without the token')
         do_logout(request)
         # retry without the token
         da_info = get_info(None)
-        messages.info(request, 'Session expired, you are logged out.')
+        messages.warning(request, 'Session expired, you are logged out.')
 
     return {
         'BEACON': da_info,

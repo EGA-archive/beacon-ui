@@ -8,6 +8,7 @@ import requests
 from django.http import HttpResponse, Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.contrib.auth import logout
+from django.contrib import messages
 
 
 from .conf import CONF
@@ -94,6 +95,9 @@ class BeaconLoginView(TemplateView):
 
         LOG.info('The user is: %r', user)
         request.session['user'] = user
+        # user_id = user.get('sub') if user else None
+        # if user_id:
+        #     messages.info(request, f'User {user_id} succesfully logged in')
 
         return HttpResponseRedirect(next_url)
 
@@ -116,5 +120,7 @@ def do_logout(request):
 
     # None or del ?
     logout(request) # kills the session cookie
+
+    #messages.info(request, f'Succesfully logged out')
 
     # Note: Not logging out from the IdP

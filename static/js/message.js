@@ -1,22 +1,16 @@
 (function(){ // scoping
 
-    var message = $('#message');
+    // Not super efficient, but we won't have many messages
+    $('#messages li').each(function( index ) {
+	var el = $( this )
+	var hideMe = function(){ el.addClass('hidden'); };
+	var timer = setTimeout(hideMe, 5000);
+	el.on("mouveover", function() {
+	    clearTimeout(timer);
+	}).on("mouveout", function() {
+	    timer = setTimeout(hideMe, 5000);
+	});
+    });
 
-    var timer;
-    var fadeAway = function(){
-	timer = setTimeout(function(){ message.addClass('hidden'); }, 5000);
-    }
-
-    if( message.hasClass('fadeAway') ){
-	fadeAway();
-    }
-
-    message.on("mouveover", function() {
-	message.removeClass('fadeAway');
-	clearTimeout(timer);
-    }).on("mouveout", function() {
-	message.addClass('fadeAway');
-	fadeAway();
-    }
 
 })();
