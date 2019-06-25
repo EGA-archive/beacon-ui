@@ -1,7 +1,11 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import BeaconQueryView, BeaconSNPView, BeaconRegionView, BeaconAccessLevelsView
+from .views import (BeaconQueryView,
+                    BeaconSNPView,
+                    BeaconRegionView,
+                    BeaconAccessLevelsView,
+                    BeaconFilteringTermsView)
 from .auth import BeaconLoginView, BeaconLogoutView
 
 urlpatterns = [
@@ -11,6 +15,10 @@ urlpatterns = [
     path('region', BeaconRegionView.as_view(), name='region'),
     # Access Levels
     path('access-levels', BeaconAccessLevelsView.as_view(), name='levels'),
+    # Filtering terms
+    path('terms', BeaconFilteringTermsView.as_view(), name='filters'),
+    path('terms/', BeaconFilteringTermsView.as_view(), name='filters/'),
+    path('terms/<term>', BeaconFilteringTermsView.as_view(), name='filters-term'),
     # Login endpoints
     path('login', BeaconLoginView.as_view(), name='login'),
     path('privacy', TemplateView.as_view(template_name='privacy.html'), name='privacy'),

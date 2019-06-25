@@ -7,12 +7,12 @@ from urllib.parse import urlencode
 
 import requests
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.generic import TemplateView
+from django.http import HttpResponse, JsonResponse
+from django.views.generic import TemplateView, View
 from django.conf import settings
 from django.contrib.auth import logout
 
-from .conf import CONF
+from . import conf
 from . import forms
 
 LOG = logging.getLogger(__name__)
@@ -107,7 +107,7 @@ class BaseView(TemplateView):
 
 class BeaconQueryView(BaseView):
     formbase = 'QueryForm'
-    api_endpoint = CONF.get('beacon-api', 'query')
+    api_endpoint = conf.CONF.get('beacon-api', 'query')
     api_endpoint_error = '[beacon-api] query endpoint misconfigured'
     # cheat_data = {
     #     'query': "1 : 13272 G > C",
@@ -119,7 +119,7 @@ class BeaconQueryView(BaseView):
 
 class BeaconSNPView(BaseView):
     formbase = 'QueryForm'
-    api_endpoint = CONF.get('beacon-api', 'genomic_snp')
+    api_endpoint = conf.CONF.get('beacon-api', 'genomic_snp')
     api_endpoint_error = '[beacon-api] genomic_snp endpoint misconfigured'
     # cheat_data = {
     #     'query': "1 : 13272 G > C",
@@ -130,7 +130,7 @@ class BeaconSNPView(BaseView):
 
 class BeaconRegionView(BaseView):
     formbase = 'QueryRegionForm'
-    api_endpoint = CONF.get('beacon-api', 'genomic_region')
+    api_endpoint = conf.CONF.get('beacon-api', 'genomic_region')
     api_endpoint_error = '[beacon-api] genomic_region endpoint misconfigured'
     # cheat_data = {
     #     'query': "1 : 14900 - 15000",
@@ -143,7 +143,7 @@ class BeaconAccessLevelsView(TemplateView):
 
     def get(self, request):
 
-        query_url = CONF.get('beacon-api', 'access_levels', fallback=None)
+        query_url = conf.CONF.get('beacon-api', 'access_levels', fallback=None)
         if not query_url:
             return render(request, 'error.html', {'message':'[beacon-api] access_levels is misconfigured' })
 
@@ -171,3 +171,29 @@ class BeaconAccessLevelsView(TemplateView):
         ctx['datasetsParam'] = True if request.GET.get('displayDatasetDifferences', 'false') == 'true' else False
 
         return render(request, 'access_levels.html', ctx)
+
+
+def get_filters(word):
+    count = 0
+    for k,v in conf.FILTERING_TERMS:
+        if not word or v.lower().startswith(word.lower()):
+            count+=1
+            
+            if count > settings.AUTOCOMPLETE_LIMIT: # last word in the list
+                yield (settings.AUTOCOMPLETE_ELLIPSIS, settings.AUTOCOMPLETE_ELLIPSIS)
+                break
+            
+            yield (k,v)
+
+
+class BeaconFilteringTermsView(View):
+    
+    def get(self,request, term=''): # empty string for all words
+        #print(f'chosen word: "{term}"')
+        if term is None:
+            return JsonResponse( [], safe=False)
+
+        terms = [ {'value': k, 'label': v }
+                  for k,v in get_filters(term) ]
+
+        return JsonResponse( terms, safe=False)

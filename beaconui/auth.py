@@ -10,7 +10,6 @@ from django.views.generic import TemplateView
 from django.contrib.auth import logout
 from django.contrib import messages
 
-
 from .conf import CONF
 
 LOG = logging.getLogger(__name__)

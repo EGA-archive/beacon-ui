@@ -34,7 +34,7 @@ if log_file and os.path.exists(log_file):
 
 # Initialize the list of Assembly Ids, with the Anonymous user.
 # Since it's the same list for every user
-from .context_processors import get_info
+from .api import get_info, get_filtering_terms
 
 try:
     _info = get_info(None) # no user
@@ -43,3 +43,15 @@ except Exception as e:
     sys.exit(2)
 
 BEACON_ASSEMBLYIDS = set( (d['assemblyId'] for d in _info.get('datasets', [])) )
+
+
+# Filtering terms
+try:
+    FILTERING_TERMS = get_filtering_terms('filtering_terms') # kw for the cache
+except Exception as e:
+    print(e, file=sys.stderr)
+    sys.exit(2)
+
+FILTERING_TERMS = [ ('{}:{}'.format(p.get('ontology'), p.get('term')),
+                     p.get('label')) for p in FILTERING_TERMS ]
+

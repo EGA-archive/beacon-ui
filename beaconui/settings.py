@@ -113,6 +113,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
                 'beaconui.context_processors.info',
+                'beaconui.context_processors.filters',
             ],
         },
     },
@@ -142,3 +143,5 @@ STATICFILES_DIRS = [ # additional
 ]
 
 
+AUTOCOMPLETE_LIMIT = 16
+AUTOCOMPLETE_ELLIPSIS = '...'

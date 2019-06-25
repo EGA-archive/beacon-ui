@@ -3,7 +3,8 @@ form#query {
     display:grid;
     grid-template-columns: 400px 1fr;
     /* grid-template-rows: auto auto auto auto; */
-    grid-template-rows: auto;
+    grid-template-rows: auto auto 150px auto;
+    /* grid-template-rows: auto; */
     grid-template-areas: "search search"
 			 "include-responses include-responses"
                          "datasets filters"
@@ -193,10 +194,15 @@ form#query {
 		&::placeholder { color: #222; }
 		&:focus { box-shadow: 0 0 5px rgba(81, 203, 238, 1); }
 	    }
-	    
+
+	    span {
+		padding: .3em 1em;
+		outline: none;
+		border: 1px solid #DDDDDD;
+		line-height: 1.15;
+	    }
 	    i { margin-left:1ex; }
 	    /* input + i { margin-left:1ex; } */
-
 	}
     }
 
