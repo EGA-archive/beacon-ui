@@ -64,7 +64,10 @@
 	{% for dataset in BEACON.datasets %}
 	<section>
 	  <a href="//ega-archive.org/datasets/{{ dataset.id }}">
-	    <span class="label label-{{ dataset.info.accessType|lower }}">{{ dataset.id }}</span>
+	    <span class="label label-{{ dataset.info.accessType|lower }} label-{% if dataset.info.authorized != 'true' %}not_{% endif %}authorized"
+		  title="{% if dataset.info.authorized == 'true' %}Authorized{% else %}You are not authorized to access dataset {{ dataset.id }}{% endif %}">
+	      {{ dataset.id }}
+	    </span>
 	  </a>
 	  <p>{{ dataset.description|default:'-' }}</p>
 	</section>

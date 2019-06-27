@@ -31,3 +31,24 @@ $alert-warning-border:           darken($alert-warning-bg, 5%) !default;
 $alert-danger-text:              #a94442 !default;
 $alert-danger-bg:                #f2dede !default;
 $alert-danger-border:            darken($alert-danger-bg, 5%) !default;
+
+
+
+$label-public: #5cb85c;
+$label-registered: #f0ad4e;
+$label-controlled: #d9534f;
+$label-not_supported: #ccc;
+$label-authorized: $label-public;
+$label-not_authorized: $label-controlled;
+
+
+@mixin labelGradient($left, $right){
+    background: $left; /* Old browsers */
+    background: -moz-linear-gradient(left,  $left 80%, $right 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left, right, color-stop(80%,$left), color-stop(100%,$right)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left,  $left 80%,$right 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,  $left 80%,$right 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,  $left 80%,$right 100%); /* IE10+ */
+    background: linear-gradient(to right,  $left 80%,$right 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}

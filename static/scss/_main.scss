@@ -17,10 +17,41 @@ main {
 	/* Fallback */
 	background-color: white; color: black; border:1px solid black;
 	
-	&.label-registered { background-color: #f0ad4e; color:white; border:none; }
-	&.label-public     { background-color: #5cb85c; color:white; border:none; }
-	&.label-controlled { background-color: #d9534f; color:white; border:none; }
-	&.label-not_supported { background-color: #ccc; color:white; border:none; }
+	&.label-public     { background-color: $label-public; color:white; border:none; }
+	&.label-registered { background-color: $label-registered; color:white; border:none; }
+	&.label-controlled { background-color: $label-controlled; color:white; border:none; }
+	&.label-not_supported { background-color: $label-not_supported; color:white; border:none; }
+
+
+	&.label-public.label-not_authorized { 
+	    background: linear-gradient(to right, $label-public 95%, $label-not_authorized 97%); 
+	}
+	&.label-public.label-authorized { 
+	    background: linear-gradient(to right, $label-public 95%, $label-authorized 97%); 
+	}
+	
+	&.label-registered.label-not_authorized { 
+	    background: linear-gradient(to right, $label-registered 95%, $label-not_authorized 97%); 
+	}
+	&.label-registered.label-authorized { 
+	    background: linear-gradient(to right, $label-registered 95%, $label-authorized 97%); 
+	}
+	
+	&.label-controlled.label-not_authorized { 
+	    background: linear-gradient(to right, $label-controlled 95%, $label-not_authorized 97%); 
+	}
+	&.label-controlled.label-authorized { 
+	    background: linear-gradient(to right, $label-controlled  95%, $label-authorized 97%); 
+	}
+	
+	&.label-not_supported.label-not_authorized { 
+	    background: linear-gradient(to right, $label-not_supported 95%, $label-not_authorized 97%); 
+	}
+	&.label-not_supported.label-authorized { 
+	    background: linear-gradient(to right, $label-not_supported 95%, $label-authorized 97%); 
+	}
+	
+	
     }
     
     p { margin:0 0 1em 0; }
@@ -38,15 +69,14 @@ main {
 
 	    max-width:100%;
 
-	    > p { margin:0; padding: 0 1em;
+	    > p { margin:0; padding:0;
 		  /* overflow: hidden; text-overflow: ellipsis; white-space: nowrap; */
 		  flex:1;
 		}
 	    > a {
-		display:inline-block; margin:0; padding:0; text-decoration:none;
+		display:inline-block; margin:0 1em 0 0; padding:0; text-decoration:none;
 		.label { font-size:1em; }
 	    }
-
 	}
     }
 }
