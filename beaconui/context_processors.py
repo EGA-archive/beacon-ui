@@ -19,7 +19,7 @@ def info(request):
         user_id = user.get('sub') if user else None
         LOG.info('User id: %s', user_id )
         access_token = request.session.get('access_token')
-        da_info = get_info(user_id, access_token = None)
+        da_info = get_info(user_id, access_token = access_token)
     except AuthAPIError as ae:
         LOG.debug('Retrying without the token')
         do_logout(request)

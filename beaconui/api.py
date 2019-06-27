@@ -55,6 +55,7 @@ def get_info(user, access_token = None):
                 'Content-type': 'application/json',
     }
     if access_token: # we have a user
+        LOG.debug('with a token')
         headers['Authorization'] = 'Bearer ' + access_token
 
     resp = requests.get(query_url, headers=headers)
