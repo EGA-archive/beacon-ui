@@ -47,11 +47,11 @@ BEACON_ASSEMBLYIDS = set( (d['assemblyId'] for d in _info.get('datasets', [])) )
 
 # Filtering terms
 try:
-    FILTERING_TERMS = get_filtering_terms('filtering_terms') # kw for the cache
+    _terms = get_filtering_terms('filtering_terms') # kw for the cache
 except Exception as e:
     print(e, file=sys.stderr)
     sys.exit(2)
 
-FILTERING_TERMS = [ ('{}:{}'.format(p.get('ontology'), p.get('term')),
-                     p.get('label')) for p in FILTERING_TERMS ]
+FILTERING_TERMS = dict( ('{}:{}'.format(p.get('ontology'), p.get('term')),
+                         p.get('label')) for p in _terms )
 

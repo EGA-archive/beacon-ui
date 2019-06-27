@@ -75,7 +75,7 @@ def get_info(user, access_token = None):
 # Using ckey as cache key
 @cached
 def get_filtering_terms(ckey):
-    
+
     filtering_terms_url = conf.CONF.get('beacon-api', 'filtering_terms')
     if not filtering_terms_url:
         raise BeaconAPIError('[beacon-api] filtering_terms misconfigured')

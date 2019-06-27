@@ -175,8 +175,8 @@ class BeaconAccessLevelsView(TemplateView):
 
 def get_filters(word):
     count = 0
-    for k,v in conf.FILTERING_TERMS:
-        if not word or v.lower().startswith(word.lower()):
+    for k,v in conf.FILTERING_TERMS.items():
+        if not word or word.lower() in v.lower():
             count+=1
             
             if count > settings.AUTOCOMPLETE_LIMIT: # last word in the list

@@ -20,7 +20,7 @@ def info(request):
         LOG.info('User id: %s', user_id )
         access_token = request.session.get('access_token')
         da_info = get_info(user_id, access_token = None)
-    except AuthError as ae:
+    except AuthAPIError as ae:
         LOG.debug('Retrying without the token')
         do_logout(request)
         # retry without the token

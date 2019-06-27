@@ -1,3 +1,4 @@
+{% load beacon %}
 <form id="query"
       action="{{ request.get_full_path }}"
       method="post"
@@ -72,6 +73,7 @@
       <legend>Filters <i class="filter-add fas fa-plus-circle"></i></legend>
       {% for f in filters %}
       <section>
+	<span>{{ f|convert2label }}</span>
 	<input type="text" value="{{ f }}" {% if not f %}placeholder="HP:0011007>=49 or PATO:0000383 or EFO:0009656" {% endif %}name="filters" data-lpignore="true" />
 	<i class="filter-remove fas fa-minus-circle"></i>
       </section>

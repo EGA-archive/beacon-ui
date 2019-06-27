@@ -14,3 +14,9 @@ def pprint(d):
 @register.filter
 def space2underscore(v):
     return v.replace(' ','_')
+
+# For the template to find the conversion from keyword to label
+from ..conf import FILTERING_TERMS
+@register.filter
+def convert2label(kw):
+    return FILTERING_TERMS.get(kw)
