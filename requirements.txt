@@ -3,9 +3,11 @@ PyYAML
 aiohttp
 aiohttp_wsgi
 aiohttp_session
-#cryptography
 aiohttp_jinja2
 jinja2
-#urllib3==1.24.2
 requests
-django-encrypted-cookie-session
+#
+#urllib3==1.24.2
+#
+#django-encrypted-cookie-session
+#cryptography
