@@ -5,7 +5,7 @@ main {
 
     span.label {
 	display: inline;
-	padding: .2em .6em .3em;
+	padding: .2em .6em;
 	font-size: 75%;
 	line-height: 1;
 
@@ -22,35 +22,19 @@ main {
 	&.label-controlled { background-color: $label-controlled; color:white; border:none; }
 	&.label-not_supported { background-color: $label-not_supported; color:white; border:none; }
 
-
-	&.label-public.label-not_authorized { 
-	    background: linear-gradient(to right, $label-public 95%, $label-not_authorized 97%); 
-	}
-	&.label-public.label-authorized { 
-	    background: linear-gradient(to right, $label-public 95%, $label-authorized 97%); 
-	}
+/*
+	&.label-public.label-not_authorized { @include left2rightGradient($label-public, $label-not_authorized); }
+	&.label-public.label-authorized { @include left2rightGradient($label-public, $label-authorized); }
 	
-	&.label-registered.label-not_authorized { 
-	    background: linear-gradient(to right, $label-registered 95%, $label-not_authorized 97%); 
-	}
-	&.label-registered.label-authorized { 
-	    background: linear-gradient(to right, $label-registered 95%, $label-authorized 97%); 
-	}
+	&.label-registered.label-not_authorized { @include left2rightGradient($label-registered, $label-not_authorized); }
+	&.label-registered.label-authorized { @include left2rightGradient($label-registered, $label-authorized); }
 	
-	&.label-controlled.label-not_authorized { 
-	    background: linear-gradient(to right, $label-controlled 95%, $label-not_authorized 97%); 
-	}
-	&.label-controlled.label-authorized { 
-	    background: linear-gradient(to right, $label-controlled  95%, $label-authorized 97%); 
-	}
+	&.label-controlled.label-not_authorized { @include left2rightGradient($label-controlled, $label-not_authorized); }
+	&.label-controlled.label-authorized { @include left2rightGradient($label-controlled , $label-authorized); }
 	
-	&.label-not_supported.label-not_authorized { 
-	    background: linear-gradient(to right, $label-not_supported 95%, $label-not_authorized 97%); 
-	}
-	&.label-not_supported.label-authorized { 
-	    background: linear-gradient(to right, $label-not_supported 95%, $label-authorized 97%); 
-	}
-	
+	&.label-not_supported.label-not_authorized { @include left2rightGradient($label-not_supported, $label-not_authorized); }
+	&.label-not_supported.label-authorized { @include left2rightGradient($label-not_supported, $label-authorized); }
+*/	
 	
     }
     
@@ -74,8 +58,25 @@ main {
 		  flex:1;
 		}
 	    > a {
-		display:inline-block; margin:0 1em 0 0; padding:0; text-decoration:none;
+		display:inline-block; margin:0; padding:0; text-decoration:none;
 		.label { font-size:1em; }
+	    }
+
+
+	    > span {
+
+		margin:0 1em;
+		display:inline-block;
+		padding: .2em .6em;
+		font-size: 75%;
+		border-radius: 50%;
+		cursor:help;
+
+		/* Fallback */
+		background-color: white; color: black; border:1px solid black;
+	
+		&.label-authorized { background-color: $label-authorized; color:black; border:none; }
+		&.label-not_authorized { background-color: $label-not_authorized; color:black; border:none; }
 	    }
 	}
     }

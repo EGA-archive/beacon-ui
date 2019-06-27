@@ -42,13 +42,6 @@ $label-authorized: $label-public;
 $label-not_authorized: $label-controlled;
 
 
-@mixin labelGradient($left, $right){
-    background: $left; /* Old browsers */
-    background: -moz-linear-gradient(left,  $left 80%, $right 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left, right, color-stop(80%,$left), color-stop(100%,$right)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(left,  $left 80%,$right 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(left,  $left 80%,$right 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(left,  $left 80%,$right 100%); /* IE10+ */
-    background: linear-gradient(to right,  $left 80%,$right 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+@mixin left2rightGradient($left, $right){
+    background: linear-gradient(to right, $left 95%, $right 97%); /* W3C, autoprefixer to the rescue! */
 }
