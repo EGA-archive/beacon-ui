@@ -1,4 +1,8 @@
 conf.ini
+grunt
+Makefile
+#manage.py
+.tramp_history
 
 *~
 .#*
@@ -6,10 +10,6 @@ conf.ini
 __pycache__/
 *.py[cod]
 *$py.class
-grunt
-Makefile
-manage.py
-.tramp_history
 
 *.errors
 data

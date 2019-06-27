@@ -9,6 +9,13 @@ RUN pip install --upgrade pip
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
 
+COPY beaconui /beacon/beaconui
+COPY logger.yaml /beacon/logger.yaml
+COPY manage.py /beacon/manage.py
+RUN python manage.py createcachetable && \
+    python manage.py makemigrations && \
+    python manage.py migrate
+
 ##########################
 ## Final image
 ##########################
@@ -39,6 +46,7 @@ ENV BEACON_UI_LOG  /beacon/logger.yaml
 
 COPY --from=BUILD usr/local/lib/python3.7/ usr/local/lib/python3.7/
 COPY --from=BUILD usr/local/bin/aiohttp-wsgi-serve usr/local/bin/
+COPY --from=BUILD /beacon/db.sqlite /beacon/db.sqlite
 
 RUN chown -R beacon:beacon /beacon
 WORKDIR /beacon
