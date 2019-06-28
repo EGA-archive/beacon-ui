@@ -13,8 +13,12 @@ from . import conf
 LOG = logging.getLogger(__name__)
 
 
+###########################################################################
+### For the regular queries
+###########################################################################
+
 variantTypes = ('DEL:ME','INS:ME','DUP:TANDEM','DUP','DEL','INS','INV','CNV','SNP','MNP')
-regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s+\:\s+(\d+)\s+([ATCGN]+)\s+\>\s+(DEL:ME|INS:ME|DUP:TANDEM|DUP|DEL|INS|INV|CNV|SNP|MNP|[ATCGN]+)$', re.I)
+regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s*\:\s*(\d+)\s+([ATCGN]+)\s*\>\s*(DEL:ME|INS:ME|DUP:TANDEM|DUP|DEL|INS|INV|CNV|SNP|MNP|[ATCGN]+)$', re.I)
 
 
 class IncludeDatasetResponsesWidget(forms.RadioSelect):
@@ -89,7 +93,11 @@ class QueryForm(forms.Form):
 
         return False
 
-region_regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s+\:\s+(\d+)\s+-\s+(\d+)$', re.I)
+###########################################################################
+### For the region queries
+###########################################################################
+
+region_regex = re.compile(r'^(X|Y|MT|[1-9]|1[0-9]|2[0-2])\s*\:\s*(\d+)\s*-\s*(\d+)$', re.I)
 
 class QueryRegionForm(forms.Form):
 

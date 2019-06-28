@@ -80,12 +80,14 @@ class BaseView(TemplateView):
         headers = {}
         access_token = request.session.get('access_token')
         if access_token:
+            LOG.debug('with a token: %s', access_token)
             headers['Authorization'] = 'Bearer ' + access_token
         else:
             LOG.debug('No Access token supplied')
         
         # Forwarding the request to the Beacon API
-        r = requests.get(query_url,headers)
+        r = requests.get(query_url,headers=headers)
+        LOG.debug('------------------- %s', r)
         if not r:
             return render(request, 'error.html', {'message':'Beacon backend API not available' })
 
