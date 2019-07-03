@@ -22,8 +22,8 @@ ENV BEACON_UI_CONF=/beacon/conf.ini
 
 WORKDIR /beacon
 RUN python manage.py createcachetable
-RUN python manage.py makemigrations
-RUN python manage.py migrate
+#RUN python manage.py makemigrations
+#RUN python manage.py migrate
 
 ##########################
 ## Final image

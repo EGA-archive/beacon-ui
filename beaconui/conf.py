@@ -50,7 +50,8 @@ try:
     _terms = get_filtering_terms('filtering_terms') # kw for the cache
 except Exception as e:
     print(e, file=sys.stderr)
-    sys.exit(2)
+    _terms = []
+    # sys.exit(2)
 
 FILTERING_TERMS = dict( ('{}:{}'.format(p.get('ontology'), p.get('term')),
                          p.get('label')) for p in _terms )

@@ -93,5 +93,5 @@ def get_filtering_terms(ckey):
     if resp.status_code == 200:
         return data.get('ontologyTerms')
 
-    message = data.get('header',{}).get('userMessage', f'An error occured while contacting {query_url}')
+    message = data.get('header',{}).get('userMessage', f'An error occured while contacting {filtering_terms_url}')
     raise Exception(f'Error {resp.status_code}: {message}')
